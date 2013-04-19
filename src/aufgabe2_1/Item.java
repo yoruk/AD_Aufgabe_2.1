@@ -3,25 +3,33 @@ package aufgabe2_1;
 import java.util.*;
 
 public class Item {
-	final int productPosx;
-	final int productPosy;
-	final int productSize;
-	final int item_id;
+	private int productPosX;
+	private int productPosY;
+	private int productSize;
+	private int item_id;
 	private static int idCounter = 1;
 
 	private Item(int productPosx, int productPosy, int productSize, int item_id) {
-		this.productPosx = productPosx;
-		this.productPosy = productPosy;
+		this.productPosX = productPosx;
+		this.productPosY = productPosy;
 		this.productSize = productSize;
 		this.item_id = item_id;
 	}
-
-	public int getProductPosx() {
-        return productPosx;
+    
+    public int productPosX() {
+    	return productPosX;
     }
-
-    public int getProductPosy() {
-        return productPosy;
+    
+    public int productPosY() {
+    	return productPosY;
+    }
+    
+    public int size() {
+    	return productSize;
+    }
+    
+    public int id() {
+    	return item_id;
     }
     
     public static List<Item> factory() {
@@ -48,6 +56,6 @@ public class Item {
     @Override
     public String toString() {
     	return "Item - ID: " + item_id + " Size: " + productSize 
-    			+ " Pos x/y: " + productPosx + "/" + productPosy;
+    			+ " Pos x/y: " + productPosX + "/" + productPosY;
     }
 }

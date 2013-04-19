@@ -9,7 +9,7 @@ import java.util.*;
 
 public class Test {
 	public static void testItem_factory() {
-		System.out.println("testItem_factory()\n");
+		System.out.println("\ntestItem_factory()\n");
 		
 		List<Item> items = Item.factory();
 		
@@ -21,8 +21,15 @@ public class Test {
 			System.out.println(i);
 		}
  	}
+	
+	public static void testWarehouseImpl_factory() {
+		System.out.println("\ntestItem_factory()\n");
+		
+		System.out.println(WarehouseImpl.factory());
+	}
 
 	public static void main(String[] args) {
 		testItem_factory();
+		testWarehouseImpl_factory();
 	}
 }

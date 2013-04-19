@@ -1,5 +1,34 @@
 package aufgabe2_1;
 
-public class StorageAreaImpl implements StorageArea {
+public class StorageAreaImpl implements Field, StorageArea {
+	private int amountOfRobots;
+	private int coordinateX;
+	private int coordinateY;
+	private Item item;
+
+	public StorageAreaImpl(Item item) {
+		amountOfRobots = 0;
+		
+		coordinateX = item.productPosX();
+		coordinateY = item.productPosY();
+		
+		this.item = item;
+	}
+	
+	public int hasRobots() {
+		return amountOfRobots;
+	}
+	
+	public int coordinateX() {
+		return coordinateY;
+	}
+	
+	public int coordinateY() {
+		return coordinateY;
+	}
+
+	public boolean isBoxingPlant() {
+		return false;
+	}
 
 }
