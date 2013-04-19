@@ -1,6 +1,6 @@
 package aufgabe2_1;
 
-public class StorageAreaImpl implements Field, StorageArea {
+public class StorageAreaImpl implements StorageArea {
 	private int amountOfRobots;
 	private int coordinateX;
 	private int coordinateY;
@@ -30,5 +30,14 @@ public class StorageAreaImpl implements Field, StorageArea {
 	public boolean isBoxingPlant() {
 		return false;
 	}
+	
+	public Item item() {
+		return item;
+	}
 
+	@Override
+	public String toString() {
+		return "SorageAreaImpl - Pos x/y " + coordinateX + "/" + coordinateY 
+				+ " | " + item;
+	}
 }

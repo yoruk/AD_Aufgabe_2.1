@@ -7,11 +7,11 @@ public class Item {
 	private int productPosY;
 	private int productSize;
 	private int item_id;
-	private static int idCounter = 1;
+	private static int idCounter;
 
-	private Item(int productPosx, int productPosy, int productSize, int item_id) {
-		this.productPosX = productPosx;
-		this.productPosY = productPosy;
+	private Item(int productPosX, int productPosY, int productSize, int item_id) {
+		this.productPosX = productPosX;
+		this.productPosY = productPosY;
 		this.productSize = productSize;
 		this.item_id = item_id;
 	}
@@ -36,9 +36,11 @@ public class Item {
     	List<Item> itemList = new ArrayList<Item>();
     	int maxSize;
     	
+    	idCounter = 1;
+    	
     	for(int y=0; y<Simulation.N; y++) {
     		for(int x=0; x<Simulation.N; x++) {
-       			if(x >= Simulation.N - Simulation.NUMBOXINGPLANTS) {
+       			if((x >= Simulation.N - Simulation.NUMBOXINGPLANTS) && y == Simulation.N-1) {
     				break;
     			}
 
@@ -47,8 +49,12 @@ public class Item {
        			itemList.add(new Item(x, y, maxSize, idCounter));
     			
        			idCounter++;
+
+//       			System.out.println("DEBUG: x=" + x + " y=" + y);
     		}
     	}
+    	
+//    	System.out.println("DEBUG: Menge erstellter Items = " + itemList.size());
     	
     	return itemList;
     }

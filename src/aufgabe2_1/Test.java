@@ -23,13 +23,13 @@ public class Test {
  	}
 	
 	public static void testWarehouseImpl_factory() {
-		System.out.println("\ntestItem_factory()\n");
+		System.out.println("\ntestWarehouseImpl_factory()\n");
 		
 		System.out.println(WarehouseImpl.factory());
 	}
 
 	public static void main(String[] args) {
-		testItem_factory();
+		//testItem_factory();
 		testWarehouseImpl_factory();
 	}
 }
