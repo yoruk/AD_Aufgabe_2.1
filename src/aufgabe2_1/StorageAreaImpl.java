@@ -20,7 +20,7 @@ public class StorageAreaImpl implements StorageArea {
 	}
 	
 	public int coordinateX() {
-		return coordinateY;
+		return coordinateX;
 	}
 	
 	public int coordinateY() {

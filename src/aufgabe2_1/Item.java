@@ -58,7 +58,7 @@ public class Item {
     	
     	return itemList;
     }
-    
+
     @Override
     public String toString() {
     	return "Item - ID: " + item_id + " Size: " + productSize 

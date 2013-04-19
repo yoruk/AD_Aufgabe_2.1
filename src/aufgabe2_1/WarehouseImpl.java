@@ -12,30 +12,24 @@ public class WarehouseImpl implements Warehouse {
 		// und Items zuweisen
 		List<Item> itemlist = Item.factory();
 		for(Item i : itemlist) {
-			warehouse[i.productPosX()][i.productPosY()] = new StorageAreaImpl(i);
+			warehouse[i.productPosY()][i.productPosX()] = new StorageAreaImpl(i);
 		}
 		
-		// Alle Robots initialisieren
-		Robot[] botList = new Robot[Simulation.NUMROBOTS];
-		for(int i=0; i<botList.length; i++) {
-			botList[i] = new RobotImpl(i+1);
-		}
+		//public RobotImpl(int id, int startPosX, int startPosY, Field[][] field)
 		
 		// Alle vorgesehene Fields mit BoxingPlantImpl initialisieren
 		// und RobotImpl zuweisen
+		Robot tmpBot;
 		int count = 0;
+
 		for(int i=0; i<warehouse[Simulation.N-1].length; i++) {
-//			if(warehouse[Simulation.N-1][i] == null) {
-//				warehouse[Simulation.N-1][i] = new BoxingPlantImpl(count+1, i, Simulation.N-1, botList[0]);
-//				System.out.println(i);
-//			}
-//			
-//			count++;
-			
-//			System.out.println(warehouse[Simulation.N-1][i]);
+			if(warehouse[Simulation.N-1][i] == null) {
+				tmpBot = new RobotImpl(count+1, i, Simulation.N-1, warehouse);
+				warehouse[Simulation.N-1][i] = new BoxingPlantImpl(count+1, i, Simulation.N-1, tmpBot);
+			}
+
+			count++;
 		}
-		
-		//BoxingPlantImpl(int id, int x, int y, Robot bot)
 	}
 	
 	public static WarehouseImpl factory() {
@@ -43,7 +37,7 @@ public class WarehouseImpl implements Warehouse {
 	}
 	
 	// nur zum debuggen
-	public String toString() {
+	public String toStringTest() {
 		StringBuilder sb = new StringBuilder();
 		
 		for(int y=0; y<warehouse.length; y++) {
@@ -60,5 +54,22 @@ public class WarehouseImpl implements Warehouse {
 		}
 		
 		return sb.toString();
+	}
+	
+	public void toStringSuper() {
+	    System.out.printf("\n#################################################################\n");
+	    for(int y=0; y<warehouse.length; y++) {
+	        System.out.printf("#");
+	        for(int x=0; x<warehouse[y].length; x++) {
+	            if ((warehouse[y][x] == null)){
+	                System.out.printf("\tXX\t#");
+	            } else if(warehouse[y][x].isBoxingPlant()) {
+	                System.out.printf("\tXB %d\t#", ((BoxingPlant)warehouse[y][x]).id());
+	            } else {
+	                System.out.printf("\tXS %d\t#", ((StorageArea)warehouse[y][x]).item().id());
+	            }
+	        }
+	        System.out.printf("\n#################################################################\n");
+	    }
 	}
 }

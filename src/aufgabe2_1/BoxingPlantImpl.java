@@ -20,7 +20,7 @@ public class BoxingPlantImpl implements BoxingPlant {
 	}
 	
 	public int coordinateX() {
-		return coordinateY;
+		return coordinateX;
 	}
 	
 	public int coordinateY() {
