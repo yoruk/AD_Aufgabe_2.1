@@ -15,20 +15,18 @@ public class WarehouseImpl implements Warehouse {
 			warehouse[i.productPosY()][i.productPosX()] = new StorageAreaImpl(i);
 		}
 		
-		//public RobotImpl(int id, int startPosX, int startPosY, Field[][] field)
-		
 		// Alle vorgesehene Fields mit BoxingPlantImpl initialisieren
 		// und RobotImpl zuweisen
 		Robot tmpBot;
-		int count = 0;
+		int count = 1;
 
 		for(int i=0; i<warehouse[Simulation.N-1].length; i++) {
 			if(warehouse[Simulation.N-1][i] == null) {
-				tmpBot = new RobotImpl(count+1, i, Simulation.N-1, warehouse);
-				warehouse[Simulation.N-1][i] = new BoxingPlantImpl(count+1, i, Simulation.N-1, tmpBot);
+				tmpBot = new RobotImpl(count, i, Simulation.N-1, warehouse);
+				warehouse[Simulation.N-1][i] = new BoxingPlantImpl(count, i, Simulation.N-1, tmpBot);
+				count++;
 			}
 
-			count++;
 		}
 	}
 	
@@ -36,24 +34,61 @@ public class WarehouseImpl implements Warehouse {
 		return new WarehouseImpl(Simulation.N, Simulation.NUMBOXINGPLANTS);
 	}
 	
-	// nur zum debuggen
-	public String toStringTest() {
-		StringBuilder sb = new StringBuilder();
+//	// nur zum debuggen
+//	public String toStringTest() {
+//		StringBuilder sb = new StringBuilder();
+//		
+//		for(int y=0; y<warehouse.length; y++) {
+//			for(int x=0; x<warehouse[y].length; x++) {
+//				if((warehouse[y][x] != null) && (!warehouse[y][x].isBoxingPlant())) {
+//					sb.append(((StorageArea)warehouse[y][x]).item().id());
+//					
+//				}
+//				
+//				sb.append('\n');
+//			}
+//			
+//			sb.append("|\n");
+//		}
+//		
+//		return sb.toString();
+//	}
+	
+	@Override
+	public String toString() {
+		StringBuilder ret = new StringBuilder();
+		
+		for(int i=0; i<Simulation.N+2; i++) {
+			ret.append('#');
+		}
+		ret.append('\n');
 		
 		for(int y=0; y<warehouse.length; y++) {
-			for(int x=0; x<warehouse[y].length; x++) {
-				if((warehouse[y][x] != null) && (!warehouse[y][x].isBoxingPlant())) {
-					sb.append(((StorageArea)warehouse[y][x]).item().id());
-					
+			ret.append('#');
+			
+			for(int x=0; x<warehouse.length; x++) {
+				if(warehouse[y][x].hasRobots() > 1) {
+					ret.append('X');
+				} else if(warehouse[y][x].hasRobots() == 1) {
+					ret.append(warehouse[y][x].robotID());
+				} else {
+					if(warehouse[y][x].isBoxingPlant()) {
+						ret.append('B');
+					} else {
+						ret.append('S');
+					}
 				}
-				
-				sb.append('\n');
 			}
 			
-			sb.append("|\n");
+			ret.append("#\n");
 		}
 		
-		return sb.toString();
+		for(int i=0; i<Simulation.N+2; i++) {
+			ret.append('#');
+		}
+		ret.append('\n');
+		
+		return ret.toString();
 	}
 	
 	public void toStringSuper() {

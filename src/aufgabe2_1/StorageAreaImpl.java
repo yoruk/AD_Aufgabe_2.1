@@ -5,6 +5,7 @@ public class StorageAreaImpl implements StorageArea {
 	private int coordinateX;
 	private int coordinateY;
 	private Item item;
+	private int robotId;
 
 	public StorageAreaImpl(Item item) {
 		amountOfRobots = 0;
@@ -39,5 +40,19 @@ public class StorageAreaImpl implements StorageArea {
 	public String toString() {
 		return "SorageAreaImpl - Pos x/y " + coordinateX + "/" + coordinateY 
 				+ " | " + item;
+	}
+
+	public void reg(Robot bot) {
+		 amountOfRobots++;
+		 this.robotId = bot.id();
+	}
+
+	public void unReg() {
+		amountOfRobots--;
+       this.robotId = 0;
+	}
+
+	public int robotID() {
+		return robotId;
 	}
 }

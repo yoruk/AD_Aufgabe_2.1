@@ -7,12 +7,15 @@ public class BoxingPlantImpl implements BoxingPlant {
 	private int coordinateX;
 	private int coordinateY;
 	private int id;
+	private int robotId;
 	private Robot robot;
 	private List<Item> orderList;
 	private boolean busy;
 	
 	public BoxingPlantImpl(int id, int x, int y, Robot bot) {
 		robot = bot;
+		robotId = bot.id();
+		amountOfRobots = 1;
 	}
 	
 	public int hasRobots() {
@@ -37,5 +40,19 @@ public class BoxingPlantImpl implements BoxingPlant {
 
 	public boolean isBusy() {
 		return busy;
-	}	
+	}
+
+	public void reg(Robot bot) {
+		 amountOfRobots++;
+		 this.robotId = bot.id();
+	}
+
+	public void unReg() {
+		amountOfRobots--;
+        this.robotId = 0;
+	}
+
+	public int robotID() {
+		return robotId;
+	}
 }
