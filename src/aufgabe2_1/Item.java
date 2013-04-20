@@ -33,18 +33,22 @@ public class Item {
     }
     
     public static List<Item> factory() {
+    	int temp_N = (Simulation.TEST) ? JUnitTestframe.N : Simulation.N;
+    	int temp_NUMBOXINGPLANTS = (Simulation.TEST) ? JUnitTestframe.NUMBOXINGPLANTS : Simulation.NUMBOXINGPLANTS;
+    	int temp_ORDERMAXSIZE = (Simulation.TEST) ? JUnitTestframe.ORDERMAXSIZE : Simulation.ORDERMAXSIZE;
+    	
     	List<Item> itemList = new ArrayList<Item>();
     	int maxSize;
     	
     	idCounter = 1;
     	
-    	for(int y=0; y<Simulation.N; y++) {
-    		for(int x=0; x<Simulation.N; x++) {
-       			if((x >= Simulation.N - Simulation.NUMBOXINGPLANTS) && y == Simulation.N-1) {
+    	for(int y=0; y<temp_N; y++) {
+    		for(int x=0; x<temp_N; x++) {
+       			if((x >= temp_N - temp_NUMBOXINGPLANTS) && y == temp_N-1) {
     				break;
     			}
 
-       			maxSize = (int)((Math.random()) * Simulation.ORDERMAXSIZE + 1);
+       			maxSize = (int)((Math.random()) * temp_ORDERMAXSIZE + 1);
        			
        			itemList.add(new Item(x, y, maxSize, idCounter));
     			

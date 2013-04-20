@@ -6,6 +6,8 @@ public class WarehouseImpl implements Warehouse {
 	private Field[][] warehouse;
 	
 	private WarehouseImpl(int n, int numBoxingPlants) {
+		int temp_N = (Simulation.TEST) ? JUnitTestframe.N : Simulation.N;
+		
 		warehouse = new Field[n][n];
 		
 		// Alle vorgesehene Fields mit StorageAreaImpl initialisieren
@@ -20,10 +22,10 @@ public class WarehouseImpl implements Warehouse {
 		Robot tmpBot;
 		int count = 1;
 
-		for(int i=0; i<warehouse[Simulation.N-1].length; i++) {
-			if(warehouse[Simulation.N-1][i] == null) {
-				tmpBot = new RobotImpl(count, i, Simulation.N-1, warehouse);
-				warehouse[Simulation.N-1][i] = new BoxingPlantImpl(count, i, Simulation.N-1, tmpBot);
+		for(int i=0; i<warehouse[temp_N-1].length; i++) {
+			if(warehouse[temp_N-1][i] == null) {
+				tmpBot = new RobotImpl(count, i, temp_N-1, warehouse);
+				warehouse[temp_N-1][i] = new BoxingPlantImpl(count, i, temp_N-1, tmpBot);
 				count++;
 			}
 
@@ -31,7 +33,10 @@ public class WarehouseImpl implements Warehouse {
 	}
 	
 	public static WarehouseImpl factory() {
-		return new WarehouseImpl(Simulation.N, Simulation.NUMBOXINGPLANTS);
+		int temp_N = (Simulation.TEST) ? JUnitTestframe.N : Simulation.N;
+		int temp_NUMBOXINGPLANTS = (Simulation.TEST) ? JUnitTestframe.NUMBOXINGPLANTS : Simulation.NUMBOXINGPLANTS;
+		
+		return new WarehouseImpl(temp_N, temp_NUMBOXINGPLANTS);
 	}
 	
 //	// nur zum debuggen
@@ -56,9 +61,11 @@ public class WarehouseImpl implements Warehouse {
 	
 	@Override
 	public String toString() {
+		int temp_N = (Simulation.TEST) ? JUnitTestframe.N : Simulation.N;
+		
 		StringBuilder ret = new StringBuilder();
 		
-		for(int i=0; i<Simulation.N+2; i++) {
+		for(int i=0; i<temp_N+2; i++) {
 			ret.append('#');
 		}
 		ret.append('\n');
@@ -83,7 +90,7 @@ public class WarehouseImpl implements Warehouse {
 			ret.append("#\n");
 		}
 		
-		for(int i=0; i<Simulation.N+2; i++) {
+		for(int i=0; i<temp_N+2; i++) {
 			ret.append('#');
 		}
 		ret.append('\n');
