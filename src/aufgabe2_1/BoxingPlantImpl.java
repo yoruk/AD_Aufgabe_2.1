@@ -19,6 +19,10 @@ public class BoxingPlantImpl implements BoxingPlant {
 		busy = false;
 	}
 	
+	public void action() {
+		
+	}
+	
 	public void receiveOrder(Map<Item, Integer> order) {
 		this.order = order;
 		busy = true;

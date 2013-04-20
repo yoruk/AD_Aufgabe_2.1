@@ -58,6 +58,10 @@ public class WarehouseImpl implements Warehouse {
 				bplants[idle-1].receiveOrder(orderQueue.remove());
 			}
 		}
+		
+		for(int i=0; i<bplants.length; i++) {
+			bplants[i].action();
+		}
 	}
 	
 	public void takeOrder(Map<Item, Integer> order) {
@@ -95,14 +99,6 @@ public class WarehouseImpl implements Warehouse {
 	
 	public boolean done() {
 		return done;
-	}
-		
-	private void distributeOrder() {
-		int tmp = findIdleBPlant();
-		
-		if(tmp != 0) {
-			bplants[tmp-1].receiveOrder(orderQueue.poll());
-		}
 	}
 	
 	@Override
