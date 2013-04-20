@@ -9,13 +9,19 @@ public class BoxingPlantImpl implements BoxingPlant {
 	private int id;
 	private int robotId;
 	private Robot robot;
-	private List<Item> orderList;
+	private Map<Item, Integer> order;
 	private boolean busy;
 	
 	public BoxingPlantImpl(int id, int x, int y, Robot bot) {
 		robot = bot;
 		robotId = bot.id();
 		amountOfRobots = 1;
+		busy = false;
+	}
+	
+	public void receiveOrder(Map<Item, Integer> order) {
+		this.order = order;
+		busy = true;
 	}
 	
 	public int hasRobots() {

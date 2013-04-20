@@ -4,11 +4,18 @@ import java.util.*;
 
 public class WarehouseImpl implements Warehouse {
 	private Field[][] warehouse;
+	private Queue<Map<Item, Integer>> orderQueue;
+	private BoxingPlant[] bplants;
+	private boolean done;
 	
 	private WarehouseImpl(int n, int numBoxingPlants) {
 		int temp_N = (Simulation.TEST) ? JUnitTestframe.N : Simulation.N;
+		int temp_NUMBOXINGPLANTS = (Simulation.TEST) ? JUnitTestframe.NUMBOXINGPLANTS : Simulation.NUMBOXINGPLANTS;
 		
 		warehouse = new Field[n][n];
+		orderQueue = new LinkedList<Map<Item, Integer>>();
+		bplants = new BoxingPlant[temp_NUMBOXINGPLANTS];
+		done = false;
 		
 		// Alle vorgesehene Fields mit StorageAreaImpl initialisieren
 		// und Items zuweisen
@@ -26,38 +33,77 @@ public class WarehouseImpl implements Warehouse {
 			if(warehouse[temp_N-1][i] == null) {
 				tmpBot = new RobotImpl(count, i, temp_N-1, warehouse);
 				warehouse[temp_N-1][i] = new BoxingPlantImpl(count, i, temp_N-1, tmpBot);
+				bplants[count-1] = (BoxingPlant)warehouse[temp_N-1][i];
 				count++;
 			}
-
 		}
 	}
 	
-	public static WarehouseImpl factory() {
+	public static Warehouse factory() {
 		int temp_N = (Simulation.TEST) ? JUnitTestframe.N : Simulation.N;
 		int temp_NUMBOXINGPLANTS = (Simulation.TEST) ? JUnitTestframe.NUMBOXINGPLANTS : Simulation.NUMBOXINGPLANTS;
 		
 		return new WarehouseImpl(temp_N, temp_NUMBOXINGPLANTS);
 	}
 	
-//	// nur zum debuggen
-//	public String toStringTest() {
-//		StringBuilder sb = new StringBuilder();
-//		
-//		for(int y=0; y<warehouse.length; y++) {
-//			for(int x=0; x<warehouse[y].length; x++) {
-//				if((warehouse[y][x] != null) && (!warehouse[y][x].isBoxingPlant())) {
-//					sb.append(((StorageArea)warehouse[y][x]).item().id());
-//					
-//				}
-//				
-//				sb.append('\n');
-//			}
-//			
-//			sb.append("|\n");
-//		}
-//		
-//		return sb.toString();
-//	}
+	public void action() {
+		int idle; 
+		
+		if(bPlantsDone() && orderQueue.isEmpty()) {
+			done = true;
+		} else if(!orderQueue.isEmpty()) {
+			idle = findIdleBPlant();
+			
+			if(idle != 0) {
+				bplants[idle-1].receiveOrder(orderQueue.remove());
+			}
+		}
+	}
+	
+	public void takeOrder(Map<Item, Integer> order) {
+		orderQueue.add(order);
+	}
+	
+	/*
+	 * der return wert ist der index+1
+	 * der return wert ist 0, falls es keine idle bplant gibt.
+	 */
+	private int findIdleBPlant() {
+		int ret = 0;
+		
+		for(int i=0; i<bplants.length; i++) {
+			if(!bplants[i].isBusy()) {
+				return i+1;
+			}
+		}
+		
+		return ret;
+	}
+	
+	/*
+	 * kontrolliert ob alle bplants fertig sind
+	 */
+	private boolean bPlantsDone() {
+		for(int i=0; i<bplants.length; i++) {
+			if(bplants[i].isBusy()) {
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	
+	public boolean done() {
+		return done;
+	}
+		
+	private void distributeOrder() {
+		int tmp = findIdleBPlant();
+		
+		if(tmp != 0) {
+			bplants[tmp-1].receiveOrder(orderQueue.poll());
+		}
+	}
 	
 	@Override
 	public String toString() {
