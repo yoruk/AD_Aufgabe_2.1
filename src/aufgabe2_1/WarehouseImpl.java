@@ -75,7 +75,7 @@ public class WarehouseImpl implements Warehouse {
 					if(warehouse[y][x].isBoxingPlant()) {
 						ret.append('B');
 					} else {
-						ret.append('S');
+						ret.append('.');
 					}
 				}
 			}

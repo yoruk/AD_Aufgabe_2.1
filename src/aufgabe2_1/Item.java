@@ -49,12 +49,8 @@ public class Item {
        			itemList.add(new Item(x, y, maxSize, idCounter));
     			
        			idCounter++;
-
-//       			System.out.println("DEBUG: x=" + x + " y=" + y);
     		}
     	}
-    	
-//    	System.out.println("DEBUG: Menge erstellter Items = " + itemList.size());
     	
     	return itemList;
     }
