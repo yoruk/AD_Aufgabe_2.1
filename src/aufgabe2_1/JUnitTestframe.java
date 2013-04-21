@@ -9,6 +9,7 @@ public class JUnitTestframe {
 	public static int ORDERMAXSIZE = 50;
 	public static int MAXCAPACITY = ORDERMAXSIZE;
 	public static int NUMROBOTS = NUMBOXINGPLANTS;
+	public static int PPTIME = 5;
 	
 	@Test
 	public void test() {

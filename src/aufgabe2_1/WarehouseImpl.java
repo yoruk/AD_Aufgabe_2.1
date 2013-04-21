@@ -46,18 +46,25 @@ public class WarehouseImpl implements Warehouse {
 //	}
 	
 	public void action() {
-		int idle; 
+		int idle; // index fuer eine bPlant die idle ist
 		
+		// wenn alle bPlants fertig sind 
+		// und keine weiteren bestelungen vorliegen
 		if(bPlantsDone() && orderQueue.isEmpty()) {
 			done = true;
+		
+		// wenn bestellungen vorliegen
 		} else if(!orderQueue.isEmpty()) {
+			// freie bPlant suchen
 			idle = findIdleBPlant();
 			
+			// dieser die bestellung zuweisen
 			if(idle != 0) {
 				bplants[idle-1].receiveOrder(orderQueue.remove());
 			}
 		}
 		
+		// alle bPlants das action-signal geben
 		for(int i=0; i<bplants.length; i++) {
 			bplants[i].action();
 		}
