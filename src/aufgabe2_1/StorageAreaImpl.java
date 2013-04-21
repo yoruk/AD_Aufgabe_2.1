@@ -38,8 +38,7 @@ public class StorageAreaImpl implements StorageArea {
 
 	@Override
 	public String toString() {
-		return "SorageAreaImpl - Pos x/y " + coordinateX + "/" + coordinateY 
-				+ " | " + item;
+		return "SorageAreaImpl: x/y: " + coordinateX + "/" + coordinateY + " Item:" + item;
 	}
 
 	public void reg(Robot bot) {

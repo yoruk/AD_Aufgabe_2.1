@@ -10,8 +10,7 @@ public class RobotImpl implements Robot {
 	private int currentPosX;
 	private int currentPosY;
 	private boolean busy;
-	private Map<Item, Integer> order; 
-	
+	private Map<Item, Integer> order;
 	
 	public RobotImpl(int id, int startPosX, int startPosY, Field[][] field) {
 		this.id = id;

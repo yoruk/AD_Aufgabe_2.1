@@ -19,6 +19,8 @@ public class BoxingPlantImpl implements BoxingPlant {
 		robotId = bot.id();
 		amountOfRobots = 1;
 		busy = false;
+		coordinateX = x;
+		coordinateY = y;
 	}
 	
 	public void action() {
