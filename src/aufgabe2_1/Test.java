@@ -6,32 +6,42 @@ package aufgabe2_1;
  */
 
 import java.util.*;
+import java.util.Map.Entry;
 
 public class Test {
-	public static void testItem_factory() {
-		System.out.println("\ntestItem_factory()\n");
-		
-		List<Item> items = Item.factory();
+	public static void testItem_Order_factory() {
+		System.out.println("\ntestItem_Order_factory()\n");
 		
 		System.out.println("N: " + Simulation.N);
 		System.out.println("NUMBOXINGPLANTS: " + Simulation.NUMBOXINGPLANTS);
 		System.out.println("ORDERMAXSIZE: " + Simulation.ORDERMAXSIZE);
+
+		System.out.println("\nItem-Factory:");
+		
+		List<Item> items = Item.factory();
 		
 		for(Item i: items) {
 			System.out.println(i);
 		}
+		
+		System.out.println("\nOrder-Factory:");
+		
+		Map<Item, Integer> order = Order.factory(items);
+		
+		for (Entry<Item, Integer> element : order.entrySet()) {
+            System.out.println(element.getKey() + " , amount = " + element.getValue());
+        }
  	}
 	
 	public static void testWarehouseImpl_factory() {
 		System.out.println("\ntestWarehouseImpl_factory()\n");
 		
-		System.out.println(WarehouseImpl.factory());
-//		WarehouseImpl wh = WarehouseImpl.factory();
-//		wh.toStringSuper();
+		Warehouse wh = new WarehouseImpl();
+		System.out.println(wh);
 	}
 
 	public static void main(String[] args) {
-		testItem_factory();
+		testItem_Order_factory();
 		testWarehouseImpl_factory();
 
 	}

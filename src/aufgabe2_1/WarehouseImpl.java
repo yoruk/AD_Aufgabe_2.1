@@ -8,11 +8,11 @@ public class WarehouseImpl implements Warehouse {
 	private BoxingPlant[] bplants;
 	private boolean done;
 	
-	private WarehouseImpl(int n, int numBoxingPlants) {
+	public WarehouseImpl() {
 		int temp_N = (Simulation.TEST) ? JUnitTestframe.N : Simulation.N;
 		int temp_NUMBOXINGPLANTS = (Simulation.TEST) ? JUnitTestframe.NUMBOXINGPLANTS : Simulation.NUMBOXINGPLANTS;
 		
-		warehouse = new Field[n][n];
+		warehouse = new Field[temp_N][temp_N];
 		orderQueue = new LinkedList<Map<Item, Integer>>();
 		bplants = new BoxingPlant[temp_NUMBOXINGPLANTS];
 		done = false;
@@ -39,12 +39,11 @@ public class WarehouseImpl implements Warehouse {
 		}
 	}
 	
-	public static Warehouse factory() {
-		int temp_N = (Simulation.TEST) ? JUnitTestframe.N : Simulation.N;
-		int temp_NUMBOXINGPLANTS = (Simulation.TEST) ? JUnitTestframe.NUMBOXINGPLANTS : Simulation.NUMBOXINGPLANTS;
-		
-		return new WarehouseImpl(temp_N, temp_NUMBOXINGPLANTS);
-	}
+//	public static Warehouse factory() {
+//		int temp_N = (Simulation.TEST) ? JUnitTestframe.N : Simulation.N;
+//		
+//		return new WarehouseImpl(temp_N);
+//	}
 	
 	public void action() {
 		int idle; 

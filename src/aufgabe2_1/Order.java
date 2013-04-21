@@ -1,88 +1,78 @@
 package aufgabe2_1;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.Map.Entry;
 
 public class Order {
-	private int amount;
-	private Item item;
-	
-	public Order(int amount, Item item) {
-		this.amount = amount;
-		this.item = item;
-	}
+	private Map<Item, Integer> order;
 
-	public int amount() {
-		return amount;
-	}
+    // Public Konstruktor zum Anlegen von Testfaellen
+    public Order() {
+        order = new HashMap<Item, Integer>();;
+    }
+    
+    // zum testen
+    public void addItem(Item item, int amount) {
+    	order.put(item, amount);
+    }
+    
+    // zum testen
+    public Map<Item, Integer> list() {
+    	return order;
+    }
 
-	public Item item() {
-		return item;
-	}
-	
-	/**
-	 * erzeugt eine liste über Order
-	 * generiert zwei random-werte
-	 * der eine random-wert ist die artikel id mit der dann der entsprechende artikel gesucht wird
-	 * der andere ist die anzahl wie oft der artikel "bestellt" wird
-	 *
-	 * @param items erwartet eine liste aller Items
-	 * @param maxItems ist die anzahl pro artikel pro bestellungsposten
-	 *
-	 * @return List<Order>
-	 */
-	public static List<Order> factory(List<Item> items, int maxItems) { 
-//		int rndItemCnt;
-//		int item;
-//		Item temp = null;
-//		int currentOrderSize = Simulation.ORDERMAXSIZE;
-//		boolean orderComplete = false;
-		List<Order> Orderlist = new ArrayList<Order>();
-//		
-//		while(!orderComplete){
-//			
-//			item=(int) (Math.random()*items.size()+1);
-//			rndItemCnt = (int) (Math.random()*maxItems+1);
-//			
-//			for(Item e:items){
-//				if(e.id()==item){
-//					temp=e;
-//				}
-//			}
-//			//debug System.out.println(item);
-//			if((rndItemCnt*temp.size())<currentOrderSize){
-//				Orderlist.add(new Order(rndItemCnt,temp));
-//				currentOrderSize-=rndItemCnt*temp.size();
-//			}
-//			
-//			if(real){
-//				if(Math.random()<0.5&&(Orderlist.size()!=0)){
-//					orderComplete=true;
-//				}
-//			}
-//			else {
-//				if(currentOrderSize<(Simulation.ORDERMAXSIZE*0.16)){
-//				orderComplete=true;
-//				}
-//			}
-//		}
-//		// debug totalsize(Orderlist);
-		return Orderlist;
-	}
-	
-	//debug
-	private static int totalSize(List<Order> orderlist) {
-		int sum = 0;
-		
-		for(Order e : orderlist){
-			sum += e.amount() * e.item().size();
-		}
-		
-		return sum;
-	}
+    public static Map<Item, Integer> factory(List<Item> items) {
+    	int temp_ORDERMAXSIZE = (Simulation.TEST) ? JUnitTestframe.ORDERMAXSIZE : Simulation.ORDERMAXSIZE;
+    	
+    	Map<Item, Integer> orderMap = new HashMap<Item, Integer>();
+    	boolean orderComplete = false;
+        int randomItem;
+        int currentOrderSize = temp_ORDERMAXSIZE;
+        Item tempItem = null;
+        Integer tempQuantity = 0;
 
-	@Override
-	public String toString() {
-		return "Order [cnt=" + amount + ", item=" + item + "]";
-	}
+        while (!orderComplete) {
+        	
+        	// Zufaelliges Item aus uebergebener List<Item> suchen
+            randomItem = (int) (Math.random() * items.size() + 1);
+
+            for (Item element : items) {
+                if (element.id() == randomItem) {
+                    tempItem = element;
+                }
+            }
+
+            // Wenn das neue Random Item zu gross ist, wird es nicht mehr hinzugefuegt
+            if ((currentOrderSize - tempItem.size()) >= 0) {
+
+                // Wenn das Item in der Map vorhanden ist, wird die Quantity vom Item erhoeht,
+                // ansonten wird es neu angelegt
+                if (orderMap.containsKey(tempItem)) {
+
+                    tempQuantity = orderMap.get(tempItem);
+                    tempQuantity++;
+                } else {
+                    tempQuantity = 1;
+                }
+
+                orderMap.put(tempItem, tempQuantity);
+                currentOrderSize -= tempItem.size();
+            } else {
+                orderComplete = true;
+            }
+        }
+
+        return orderMap;
+    }
+
+    @Override
+    public String toString() {
+    	StringBuilder output = new StringBuilder();
+
+        for (Entry<Item, Integer> element : order.entrySet()) {
+            output.append(element.getKey() + " = " + element.getValue());
+        }
+
+        return output.toString();
+    }
 }
