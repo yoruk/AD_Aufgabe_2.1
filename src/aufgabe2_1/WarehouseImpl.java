@@ -1,5 +1,6 @@
 package aufgabe2_1;
 
+import java.text.DecimalFormat;
 import java.util.*;
 
 public class WarehouseImpl implements Warehouse {
@@ -7,6 +8,7 @@ public class WarehouseImpl implements Warehouse {
 	private Queue<Map<Item, Integer>> orderQueue;
 	private BoxingPlant[] bplants;
 	private boolean done;
+	private DecimalFormat df = new DecimalFormat("00");
 
 	public WarehouseImpl() {
 		new WarehouseImpl(Item.factory());
@@ -23,8 +25,7 @@ public class WarehouseImpl implements Warehouse {
 		
 		// Alle vorgesehene Fields mit StorageAreaImpl initialisieren
 		// und Items zuweisen
-		List<Item> itemlist = itemList;
-		for(Item i : itemlist) {
+		for(Item i : itemList) {
 			warehouse[i.productPosY()][i.productPosX()] = new StorageAreaImpl(i);
 		}
 		
@@ -33,21 +34,27 @@ public class WarehouseImpl implements Warehouse {
 		Robot tmpBot;
 		int count = 1;
 
+//		for(int i=0; i<warehouse[temp_N-1].length; i++) {
+//			if(warehouse[temp_N-1][i] == null) {
+//				tmpBot = new RobotImpl(count, i, temp_N-1, warehouse);
+//				warehouse[temp_N-1][i] = new BoxingPlantImpl(count, i, temp_N-1, tmpBot);
+//				bplants[count-1] = (BoxingPlant)warehouse[temp_N-1][i];
+//				count++;
+//			}
+//		}
 		for(int i=0; i<warehouse[temp_N-1].length; i++) {
 			if(warehouse[temp_N-1][i] == null) {
+			    if(i < Simulation.NUMBOXINGPLANTS) {
 				tmpBot = new RobotImpl(count, i, temp_N-1, warehouse);
 				warehouse[temp_N-1][i] = new BoxingPlantImpl(count, i, temp_N-1, tmpBot);
 				bplants[count-1] = (BoxingPlant)warehouse[temp_N-1][i];
+			    } else {
+			        warehouse[temp_N-1][i] = new FieldImpl();
+			    }
 				count++;
 			}
 		}
 	}
-	
-//	public static Warehouse factory() {
-//		int temp_N = (Simulation.TEST) ? JUnitTestframe.N : Simulation.N;
-//		
-//		return new WarehouseImpl(temp_N);
-//	}
 	
 	public void action() {
 		int idle; // index fuer eine bPlant die idle ist
@@ -55,21 +62,24 @@ public class WarehouseImpl implements Warehouse {
 		// wenn alle bPlants fertig sind 
 		// und keine weiteren bestelungen vorliegen
 		if(bPlantsDone() && orderQueue.isEmpty()) {
-			done = true;
-		
-		// wenn bestellungen vorliegen
-		} else if(!orderQueue.isEmpty()) {
-			// freie bPlant suchen
-			idle = findIdleBPlant();
-			
-			// dieser die bestellung zuweisen
-			if(idle != 0) {
-				bplants[idle-1].receiveOrder(orderQueue.remove());
-			}
-		}
+            done = true;
+        
+        // wenn bestellungen vorliegen
+        }
+
 		
 		// alle bPlants das action-signal geben
 		for(int i=0; i<bplants.length; i++) {
+		       if(!orderQueue.isEmpty()) {
+		            // freie bPlant suchen
+		            idle = findIdleBPlant();
+		            
+		            // dieser die bestellung zuweisen
+		            if(idle != 0) {
+		                bplants[idle-1].receiveOrder(orderQueue.remove());
+		            }
+		        }
+		      
 			bplants[i].action();
 		}
 	}
@@ -111,8 +121,7 @@ public class WarehouseImpl implements Warehouse {
 		return done;
 	}
 	
-	@Override
-	public String toString() {
+	public String toStringMini() {
 		int temp_N = (Simulation.TEST) ? JUnitTestframe.N : Simulation.N;
 		
 		StringBuilder ret = new StringBuilder();
@@ -149,21 +158,67 @@ public class WarehouseImpl implements Warehouse {
 		
 		return ret.toString();
 	}
-	
-	public void toStringSuper() {
-	    System.out.printf("\n#################################################################\n");
-	    for(int y=0; y<warehouse.length; y++) {
-	        System.out.printf("#");
-	        for(int x=0; x<warehouse[y].length; x++) {
-	            if ((warehouse[y][x] == null)){
-	                System.out.printf("\tXX\t#");
-	            } else if(warehouse[y][x].isBoxingPlant()) {
-	                System.out.printf("\tXB %d\t#", ((BoxingPlant)warehouse[y][x]).id());
-	            } else {
-	                System.out.printf("\tXS %d\t#", ((StorageArea)warehouse[y][x]).item().id());
-	            }
-	        }
-	        System.out.printf("\n#################################################################\n");
-	    }
-	}
+
+    public String toStringMaxi() {
+
+        int border = (Simulation.TEST) ? JUnitTestframe.N : Simulation.N;
+        StringBuilder output = new StringBuilder();
+        StringBuilder xFrame = new StringBuilder("####");
+        StringBuilder frame;
+
+        for (int y = 0; y < warehouse.length; y++) {
+
+            // Y-Koordinaten anzeigen
+            output.append('#').append(df.format(y)).append("#");
+
+            for (int x = 0; x < warehouse.length; x++) {
+
+                // Einmalig das X-Koodinaten Frame erstellen
+                if(y == 0) {
+                    xFrame.append('#').append(df.format(x)).append("#"); // X-Koordinate erzeugen
+                }
+
+                if (warehouse[y][x].hasRobots() > 1) {
+                    output.append("[XX]"); // Robot Crash
+                } else if (warehouse[y][x].hasRobots() == 1) {
+                    output.append("[").append(df.format(warehouse[y][x].robotID())).append("]");
+                } else {
+                    if (warehouse[y][x].isBoxingPlant()) {
+                        output.append("[BX]"); // BoxingPlant
+                    } else {
+                        output.append("[  ]"); // Field
+                    } // else
+                } // else
+            } // for
+            output.append("#\n"); // Zeilenumbruch an Y-Zeile anhaengen            
+        } // for
+
+        border = output.indexOf("\n"); // Zeilenbreite in border speichern
+        frame = new StringBuilder(""); // Leeren StringBuilder initialisieren
+
+        // String mit der Laenge einer Zeilenbreite mit Rauten fuellen
+        for (int i = 0; i < border; i++) {
+            frame.append("#");
+        }
+
+        frame.append("\n"); // Zeilenumbruch in Rauten-String anhaengen
+        xFrame.append("#\n"); // Zeilenumbruch mit Raute xFrame anhaengen
+        output.insert(0, frame); // Rauten-Abgrenzung fuer X-Koordinaten einfuegen
+        output.insert(0, xFrame); // X-Koordinaten einfuegen
+        output.insert(0, frame); // Erste Zeile mit Rauten befuellen
+        output.append(frame); // Letzte Zeile mit Rauten befuellen
+
+        return output.toString();
+    }
+    
+    @Override
+    public String toString() {
+    	int tmp = (Simulation.TEST) ? JUnitTestframe.N : Simulation.N;
+    	
+    	if(tmp >= 10) {
+    		return toStringMaxi();
+    	} else {
+    		return toStringMini();
+    	}
+    }
 }

@@ -10,6 +10,7 @@ public class JUnitTestframe {
 	public static int MAXCAPACITY = ORDERMAXSIZE;
 	public static int NUMROBOTS = NUMBOXINGPLANTS;
 	public static int PPTIME = 5;
+	public static int CLTIME = 10;
 	
 	@Test
 	public void test() {

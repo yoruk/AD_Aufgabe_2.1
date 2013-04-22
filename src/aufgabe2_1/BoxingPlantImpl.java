@@ -1,5 +1,6 @@
 package aufgabe2_1;
 
+import java.text.DecimalFormat;
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -7,13 +8,17 @@ public class BoxingPlantImpl implements BoxingPlant {
 	private int amountOfRobots;
 	private int coordinateX;
 	private int coordinateY;
-	private final int id;
+	private final int ID;
 	private int robotId;
 	private Robot robot;
 	private Map<Item, Integer> order;
 	private boolean busy;
 	private int packingTime;
-	
+	private final int temp_PPTIME = (Simulation.TEST) ? JUnitTestframe.PPTIME : Simulation.PPTIME;
+	private final int temp_CLTIME = (Simulation.TEST) ? JUnitTestframe.CLTIME : Simulation.CLTIME;
+	private int temp_CLTIME_cnt = temp_CLTIME;
+	private DecimalFormat df = new DecimalFormat("00");	
+
 	public BoxingPlantImpl(int id, int x, int y, Robot bot) {
 		robot = bot;
 		robotId = bot.id();
@@ -21,29 +26,40 @@ public class BoxingPlantImpl implements BoxingPlant {
 		busy = false;
 		coordinateX = x;
 		coordinateY = y;
-		this.id = id;
+		ID = id;
 	}
 	
 	public void action() {
-//	    System.out.println("Action Boxinplant");
-//	    System.out.println("Boxingplant1:" + order.toString());
 		// wenn eine bestellung vorliegt und der robot nicht unterwegs ist
 		if(order != null && !robot.isBusy()) {
 			// gib robot bestellung
 			// und loesche bestellliste
-		    System.out.println("Boxingplant:" + order.toString());
+		    System.out.println("BoxingPlant [" + df.format(this.id()) + "]: Bekomme Order " + order.toString());
 			robot.receiveOrder(order);
 			order = null;
+		}
 			
-		// wenn keine bestelliste vorliegt, robot nicht(mehr) unterwegs ist
-		// aber amountOfItems > 0 --> es muss eine bestellung verpackt werden 
-		} else if(order == null && !robot.isBusy() && packingTime != 0) {
-		    System.out.println("Packen BosingStation:"+id);
-			packingTime--;
-			busy = false;
+		// wenn der roboter unterwegs ist, wird nur eine action 
+		// nach ablauf des counters ausgeloest
+		if(order == null && robot.isBusy() && temp_CLTIME_cnt-1 != 0) {
+			temp_CLTIME_cnt--;
+		} else {
+			robot.action();
+			
+			temp_CLTIME_cnt = temp_CLTIME;
 		} 
-		if(packingTime > 0) {
-		    robot.action();
+
+		// wenn keine bestelliste vorliegt, robot nicht(mehr) unterwegs ist
+		// aber packingTime > 0 --> es muss eine bestellung verpackt werden 
+		if(order == null && !robot.isBusy() && packingTime != 0) {
+			System.out.println("BoxingPlant " + ID + " packt");
+			
+			packingTime--;
+		} 
+		
+		// nach dem verpacken ist die bplant fertig
+		if(order == null && !robot.isBusy() && packingTime == 0){			
+			busy = false;
 		}
 	}
 
@@ -58,6 +74,9 @@ public class BoxingPlantImpl implements BoxingPlant {
 		for (Entry<Item, Integer> element : order.entrySet()) {
             packingTime += element.getValue();
         }
+		
+		// reale packzeit ausrechnen
+		packingTime *= temp_PPTIME;
 		
 		// zustand of busy setzen
 		busy = true;
@@ -80,7 +99,7 @@ public class BoxingPlantImpl implements BoxingPlant {
 	}
 
 	public int id() {
-		return id;
+		return ID;
 	}
 
 	public boolean isBusy() {

@@ -42,7 +42,7 @@ public class Item {
     	
     	idCounter = 1;
     	
-    	for(int y=0; y<temp_N; y++) {
+    	for(int y=0; y<temp_N-1; y++) {
     		for(int x=0; x<temp_N; x++) {
        			if((x >= temp_N - temp_NUMBOXINGPLANTS) && y == temp_N-1) {
     				break;
