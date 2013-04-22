@@ -104,14 +104,21 @@ public class RobotImpl implements Robot {
     	int rand = rand();
     	int rand2 = (rand == -1) ? 1 : -1;
 
+    	// Abhaengig von Rand links oder rechts
     	if (currentPosY != lastPosY && currentPosX + rand != lastPosX && fieldFree(currentPosY, currentPosX + rand)) {
     		moveTo(currentPosY, currentPosX + rand);
+    	
+    	// Abhaengig von Rand nach oben oder unten
     	} else if (currentPosY + rand != lastPosY && currentPosX != lastPosX && fieldFree(currentPosY + rand, currentPosX)) {
     		moveTo(currentPosY + rand, currentPosX);
+    		
+    	// versuchen in andere richtung zu gehen also links wenn oben rechts versucht wurde
     	} else if (currentPosY != lastPosY && currentPosX + rand2 != lastPosX && fieldFree(currentPosY, currentPosX + rand2)) {
     		moveTo(currentPosY, currentPosX + rand2);
-    	} else if (currentPosY - rand != lastPosY && currentPosX != lastPosX && fieldFree(currentPosY - rand, currentPosX)) {
-    		moveTo(currentPosY - rand, currentPosX);
+    	
+    	// versuchen in andere richtung zu gehen also unten wenn oben oben versucht wurde
+    	} else if (currentPosY - rand2 != lastPosY && currentPosX != lastPosX && fieldFree(currentPosY - rand2, currentPosX)) {
+    		moveTo(currentPosY - rand2, currentPosX);
     	} else if (fieldFree(lastPosY, lastPosX)) {
     		moveTo(lastPosY, lastPosX);
     	}

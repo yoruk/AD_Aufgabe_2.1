@@ -1,0 +1,46 @@
+public class FieldImpl implements Field {
+  //FieldImpl SETUP  
+	DECLARE int amountOfRobots;
+    DECLARE int robotId;
+	
+	//FieldImpl PROCEDURE
+	
+    public FieldImpl() {
+        amountOfRobots = 0;
+    }
+
+    public int hasRobots() {
+        return amountOfRobots;
+    }
+
+
+    public boolean isBoxingPlant() {
+        return true;
+    }
+
+    public void reg(Robot bot) {
+         amountOfRobots++;
+         this.robotId = bot.id();
+    }
+
+    public void unReg() {
+        amountOfRobots--;
+       this.robotId = 0;
+    }
+
+    public int robotID() {
+        return robotId;
+    }
+
+    @Override
+    public int coordinateX() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public int coordinateY() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+END CLASS

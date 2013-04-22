@@ -1,0 +1,77 @@
+public class Order {
+  //Order SETUP  
+    Declade Map<Item, Integer> order;
+
+	//Order PROCEDURE
+	
+    // Public Konstruktor zum Anlegen von Testfaellen
+     Order() {
+        order = NEWOBJECT HashMap<Item, Integer>();
+    
+    // zum testen
+     void addItem(Item item, int amount) {
+       CALL order.put(item, amount);
+    }
+    
+    // zum testen
+     Map<Item, Integer> list() {
+        return order;
+    }
+
+     static Map<Item, Integer> factory(List<Item> items) {
+        int temp_ORDERMAXSIZE = (Simulation.TEST) ? JUnitTestframe.ORDERMAXSIZE : Simulation.ORDERMAXSIZE;
+        
+        Map<Item, Integer> orderMap = new HashMap<Item, Integer>();
+        boolean orderComplete = false;
+        DECLADE int randomItem;
+        int currentOrderSize = temp_ORDERMAXSIZE;
+        Item tempItem = NEWOBJECT null;
+        DECLADE Integer tempQuantity = 0;
+
+        WHILE (!orderComplete) 
+            
+            // Zufaelliges Item aus uebergebener List<Item> suchen
+            randomItem = (int) (CALL Math.random() * CALL items.size() + 1);
+
+            FOR (Item element : items) 
+                IF (CALL element.id() == randomItem) 
+                    tempItem = element;
+                END IF
+            END FOR
+
+            // Wenn das neue Random Item zu gross ist, wird es nicht mehr hinzugefuegt
+            IF ((currentOrderSize - tempItem.size()) >= 0) 
+
+                // Wenn das Item in der Map vorhanden ist, wird die Quantity vom Item erhoeht,
+                // ansonten wird es neu angelegt
+                IF (orderMap.containsKey(tempItem)) 
+
+                    tempQuantity = orderMap.get(tempItem);
+                    tempQuantity++;
+				END IF
+				ELSE 
+                    tempQuantity = 1;
+                END ELSE
+
+                orderMap.put(tempItem, tempQuantity);
+                currentOrderSize -= tempItem.size();
+            END IF 
+			ELSE 
+                orderComplete = true;
+            END ELSE
+        END IF
+
+        return orderMap;
+    END WHILE
+
+    @Override
+     String toString() {
+      DECLADE StringBuilder output = NEWOBJECT StringBuilder();
+
+        FOR (Entry<Item, Integer> element : order.entrySet()) 
+            CALL output.append(CALL element.getKey() + " = " + CALL element.getValue());
+        END FOR
+
+        return CALL output.toString();
+    }
+}

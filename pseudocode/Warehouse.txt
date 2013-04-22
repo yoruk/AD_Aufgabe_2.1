@@ -1,0 +1,7 @@
+public interface Warehouse {
+	//Warehouse SETUP 
+    DECLARE void takeOrder(Map<Item, Integer> order)
+    DECLARE void action()
+    DECLARE boolean done()
+	
+END CLASS

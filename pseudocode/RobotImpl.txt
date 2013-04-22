@@ -1,0 +1,236 @@
+public class RobotImpl implements Robot {
+  //RobotImpl SETUP  
+	DECLARE final int id;
+    DECLARE Field[][] field;
+    DECLARE final int startPosX;
+    DECLARE final int startPosY;
+    DECLARE int lastPosX;
+    DECLARE int lastPosY;   
+    DECLARE int currentPosX;
+    DECLARE int currentPosY;
+    DECLARE boolean busy;
+    DECLARE Map<Item, Integer> order;
+    DECLARE Random random = NEWOBJECT Random();
+    DECLARE DecimalFormat df = NEWOBJECT DecimalFormat("00");
+	
+	
+		RobotImpl(int id, int startPosX, int startPosY, Field[][] field) {
+        this.id = id;
+        this.startPosX = startPosX;
+        this.startPosY = startPosY;
+        this.currentPosX = startPosX;
+        this.currentPosY = startPosY;
+        this.field = field;
+        busy = false;
+    }
+
+     int id() {
+        return id;
+    }
+
+     boolean isBusy() {
+        return busy;
+    }
+
+     void receiveOrder(Map<Item, Integer> order) {
+        this.order = order;
+    }
+
+    /**
+     * Bewegt sich auf die neue position und belegt sie
+     * 
+     * @param position
+     *            zukuenftige position
+     * @return anzahl Roboter auf neuem Feld
+     */
+     int moveTo(int positionY, int positionX) {
+        field[this.currentPosY][this.currentPosX].unReg();
+        lastPosY = this.currentPosY;
+        lastPosX = this.currentPosX;
+        this.currentPosY = positionY;
+        this.currentPosX = positionX;
+       CALL field[positionY][positionX].reg(this);
+
+        return CALL field[positionY][positionX].hasRobots();
+    }
+
+    /**
+     * Findet herraus in welche richtung er gehen muss;
+     * 
+     * @param destination
+     *            Wo der Robot hin will
+     * @return Richtung in die er gehen muss (N, S, W, E)
+     */
+     char findWay(int destinationY, int destinationX) {
+        if (destinationY < currentPosY) {
+            return 'N';
+        } else if (destinationY > currentPosY) {
+            return 'S';
+        } else if (destinationX < currentPosX) {
+            return 'W';
+        } else if (destinationX > currentPosX) {
+            return 'E';
+        } else {
+            return 'A';
+        }
+    }
+
+    /**
+     * Prueft ob auf einem Robot ein Feld ist
+     * 
+     * @param positionY  feld was geprueft werden soll
+     * @param positionX  feld was geprueft werden soll
+     * @return es wird true zurueck gegeben wenn das feld frei ist sonst false
+     */
+     boolean fieldFree(int positionY, int positionX) {
+        if (positionY < Simulation.N && positionX < Simulation.N && positionY > - 1 && positionX > -1 &&
+         (!field[positionY][positionX].isBoxingPlant() || (positionY == startPosY && positionX == startPosX))&&
+                field[positionY][positionX].robotID() == 0) {
+            return true;
+        }
+        return false;
+    }
+    
+     int rand(){
+        return CALL random.nextBoolean() ? 1: -1;
+    }
+
+     void evade(int y, int x) {
+        int rand = CALL rand();
+        int rand2 = (rand == -1) ? 1 : -1;
+
+        IF (currentPosY != lastPosY && currentPosX + rand != lastPosX && CALL fieldFree(currentPosY, currentPosX + rand)) 
+           CALL moveTo(currentPosY, currentPosX + rand);
+        END IF
+		ELSE IF(currentPosY + rand != lastPosY && currentPosX != lastPosX && CALL fieldFree(currentPosY + rand, currentPosX)) 
+           CALL moveTo(currentPosY + rand, currentPosX);
+        END ELSE IF
+		ELSE IF(currentPosY != lastPosY && currentPosX + rand2 != lastPosX && CALL fieldFree(currentPosY, currentPosX + rand2)) 
+          CALL  moveTo(currentPosY, currentPosX + rand2);
+        END ELSE IF (currentPosY - rand != lastPosY && currentPosX != lastPosX && CALL fieldFree(currentPosY - rand, currentPosX)) 
+           CALL moveTo(currentPosY - rand, currentPosX);
+        ELSE IF (fieldFree(lastPosY, lastPosX)) 
+            CALL moveTo(lastPosY, lastPosX);
+        END ELSE IF
+  
+
+     void load() {
+        PRINT "Robot [" + CALL df.format(CALL this.id()) + "]: Lade Item bei Y: " + CALL df.format(currentPosY) + " X: " + CALL df.format(currentPosX);
+    }
+
+    /**
+     * Sucht das sich das erste item aus der Order und gibt davon die position
+     * zurueck
+     * 
+     * @return das naechste Ziel
+     */
+		int[] destination() {
+        Set<Item> test = CALL order.keySet();
+        int[] i = { startPosY, startPosX };
+        IF (CALL !test.isEmpty()) 
+            FOR (Item elem : test) 
+                i[0] = CALL elem.productPosY();
+                i[1] = CALL elem.productPosX();
+               PRINT "Robot [" + CALL df.format(CALL this.id()) + "]: " + "Hole Item bei Y: " + CALL df.format(i[0]) + " X: " + CALL df.format(i[1]);
+                return i;
+
+            END FOR
+        END IF
+        return i;
+    }
+
+    /**
+     * versucht denn Roboter zu bewegen wenn ein feld nicht frei ist wird eine
+     * alternativ route gesucht
+     * 
+     * @param y -1 nach Norden fahren +1 nach Sueden fahren
+     * @param x -1 nach Westen fahren +1 nach Osten fahren
+     */
+    private boolean tryMove(int y, int x) {
+        IF (CALL fieldFree(currentPosY + y, currentPosX + x)) 
+           CALL moveTo(currentPosY + y, currentPosX + x);
+            return true;
+        END IF
+			ELSE IF(currentPosY + 1 <  Simulation.N && CALL field[currentPosY + 1][currentPosX].isBoxingPlant()) 
+				IF (id-1 < currentPosX && CALL fieldFree(currentPosY, currentPosX - 1)) 
+               CALL moveTo(currentPosY, currentPosX - 1);
+                return true;
+            END IF
+				ELSE IF (id-1 > currentPosX && CALL fieldFree(currentPosY, currentPosX + 1)) 
+               CALL moveTo(currentPosY, currentPosX + 1);
+                return true;
+            END ELSE IF
+        END ELSE IF
+			CALL evade(y, x);
+        return false;
+    }
+
+    /**
+     * entfernt das erste objekt aus der Order
+     * 
+     * @return true wenn loeschen erfolgreich sonst false
+     */
+		boolean remove() {
+        Set<Item> test = CALL order.keySet();
+        IF (CALL !test.isEmpty()) {
+            FOR (Item ele : test) {
+              CALL order.remove(ele);
+                return true;
+            END FOR
+        END IF
+        return false;
+    }
+
+    /**
+     * macht eine Roboter action
+     */
+     void action() {
+        // System.out.println("Robot Action");
+
+        IF (order != null && CALL !order.isEmpty()) 
+            busy = true;
+
+            // Sucht sich das nächste ziel
+            int[] i = CALL destination();
+
+            //
+            switch ( CALL findWay(i[0], i[1])) 
+            case 'N':
+               CALL  tryMove(-1, 0);
+                break;
+            case 'S':
+                CALL tryMove(+1, 0);
+                break;
+            case 'W':
+                CALL tryMove(0, -1);
+                break;
+            case 'E':
+               CALL  tryMove(0, +1);
+                break;
+            case 'A':
+               CALL load();
+               CALL remove();
+                break;
+            END SWITCH
+        END IF 
+			ELSE		
+            switch ( CALL findWay(startPosY, startPosX)) 
+            case 'N':
+                CALLtryMove(-1, 0);
+                break;
+            case 'S':
+                CALL tryMove(+1, 0);
+                break;
+            case 'W':
+                CALL tryMove(0, -1);
+                break;
+            case 'E':
+                CALL tryMove(0, +1);
+                break;
+            case 'A':
+                busy = false;
+                break;
+            END SWITCH
+        END ELSE
+    }
+END CLASS

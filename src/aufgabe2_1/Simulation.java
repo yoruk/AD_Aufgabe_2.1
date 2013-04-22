@@ -3,8 +3,8 @@ package aufgabe2_1;
 import java.util.*;
 
 public class Simulation {
-	public static final int N = 9;
-	public static final int NUMBOXINGPLANTS = 4;
+	public static final int N = 20;
+	public static final int NUMBOXINGPLANTS = 20;
 	public static final int ORDERMAXSIZE = 50;
 	public static final int MAXCAPACITY = ORDERMAXSIZE;
 	public static final int NUMROBOTS = NUMBOXINGPLANTS;
@@ -19,25 +19,25 @@ public class Simulation {
 	        List<Item> item = Item.factory();
 	        Warehouse wh = new WarehouseImpl(item);
         
-//	        for(int i = 0;i < 30;i++) {
-//	        	wh.takeOrder(Order.factory(item));
-//	        }
+	        for(int i = 0;i < 300;i++) {
+	        	wh.takeOrder(Order.factory(item));
+	        }
         
-       Order order = new Order();
-       order.addItem(item.get(0), 1);
-       wh.takeOrder(order.list());
-       
-       Order order2 = new Order();
-       order2.addItem(item.get(0), 1);
-       wh.takeOrder(order2.list());
-        
-       Order order3 = new Order();
-       order3.addItem(item.get(4), 1);
-       wh.takeOrder(order3.list());
-              
-       Order order4 = new Order();
-       order4.addItem(item.get(8), 1);
-       wh.takeOrder(order4.list());
+//       Order order = new Order();
+//       order.addItem(item.get(0), 1);
+//       wh.takeOrder(order.list());
+//       
+//       Order order2 = new Order();
+//       order2.addItem(item.get(0), 1);
+//       wh.takeOrder(order2.list());
+//        
+//       Order order3 = new Order();
+//       order3.addItem(item.get(4), 1);
+//       wh.takeOrder(order3.list());
+//              
+//       Order order4 = new Order();
+//       order4.addItem(item.get(8), 1);
+//       wh.takeOrder(order4.list());
        
        System.out.print(wh.toString());
        

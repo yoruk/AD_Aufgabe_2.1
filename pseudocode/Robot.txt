@@ -1,0 +1,9 @@
+public interface Robot {
+  //Robot SETUP  
+  
+	DECLARE int id();
+    DECLARE void action();
+    DECLARE boolean isBusy();
+    DECLARE void receiveOrder(Map<Item, Integer> order);
+   
+END CLASS

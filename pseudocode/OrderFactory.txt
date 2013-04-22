@@ -1,0 +1,16 @@
+public class OrderFactory {
+  //OrderFactory SETUP  
+	DECLADE List Order;
+
+	//OrderFactory PROCEDURE
+	
+	 OrderFactory(int item_cnt,int maxOrderSize){
+		int listlngth;
+		int item;
+
+		listlngth=(int) (CALL Math.random()*maxOrderSize+1);
+
+			listlngth=(int) (CALL Math.random()*item_cnt+1);
+
+	}
+END CLASS

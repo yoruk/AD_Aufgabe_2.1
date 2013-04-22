@@ -1,0 +1,171 @@
+public class WarehouseImpl {
+  //WarehouseImpl SETUP  
+	DECLARE   Field[][] warehouse;
+    DECLARE Queue<Map<Item, Integer>> orderQueue;
+    DECLARE BoxingPlant[] bplants;
+    DECLARE boolean done;
+    
+	//WarehouseImpl PROCEDURE
+		
+		WarehouseImpl() {
+			NEWOBJECT WarehouseImpl(CALL Item.factory());
+		}
+
+		WarehouseImpl(List<Item> itemList) {
+        DECLARE temp_N = (Simulation.TEST) ? JUnitTestframe.N : Simulation.N;
+        DECLARE temp_NUMBOXINGPLANTS = (Simulation.TEST) ? JUnitTestframe.NUMBOXINGPLANTS : Simulation.NUMBOXINGPLANTS;
+
+        warehouse = NEWOBJECT Field[temp_N][temp_N];
+        orderQueue = NEWOBJECT LinkedList<Map<Item, Integer>>();
+        bplants = NEWOBJECT BoxingPlant[temp_NUMBOXINGPLANTS];
+        done = false;
+
+        // Alle vorgesehene Fields mit StorageAreaImpl initialisieren
+        // und Items zuweisen
+        List<Item> itemlist = itemList;
+			FOR(Item i : itemlist) 
+            warehouse[CALL i.productPosY()][CALL i.productPosX()] = NEWOBJECT StorageAreaImpl(i);
+         END FOR
+
+        // Alle vorgesehene Fields mit BoxingPlantImpl initialisieren
+        // und RobotImpl zuweisen
+        DECLARE Robot tmpBot;
+        DECLARE count = 1;
+
+        FOR(DECLARE i=0; i<warehouse[temp_N-1].length; i++) 
+            IF(warehouse[temp_N-1][i] == null) 
+                tmpBot = NEWOBJECT RobotImpl(count, i, temp_N-1, warehouse);
+                warehouse[temp_N-1][i] = NEWOBJECT BoxingPlantImpl(count, i, temp_N-1, tmpBot);
+                bplants[count-1] = (BoxingPlant)warehouse[temp_N-1][i];
+                count++;
+             END IF
+         END FOR
+		}
+
+
+		void action() {
+        DECLARE idle; // index fuer eine bPlant die idle ist
+
+        // wenn alle bPlants fertig sind 
+        // und keine weiteren bestelungen vorliegen
+        if(CALL bPlantsDone() && CALL orderQueue.isEmpty()) {
+            done = true;
+		END IF
+        // wenn bestellungen vorliegen
+         ELSE IF(!orderQueue.isEmpty()) 
+            // freie bPlant suchen
+            idle = CALL findIdleBPlant();
+
+            // dieser die bestellung zuweisen
+            IF(idle != 0) 
+                CALL bplants[idle-1].receiveOrder(CALL orderQueue.remove());
+            END IF
+        END END IF
+
+        // alle bPlants das action-signal geben
+        FOR(int i=0; i<bplants.length; i++) 
+            bplants[i].action();
+        END FOR
+    }
+
+    @Override
+     void takeOrder(Map<Item, Integer> order) {
+        CALL orderQueue.add(order);
+    }
+
+    /*
+     * der return wert ist der index+1
+     * der return wert ist 0, falls es keine idle bplant gibt.
+     */
+    private int findIdleBPlant() {
+        DECLARE ret = 0;
+
+        FOR(int i=0; i<bplants.length; i++) 
+            IF(CALL !bplants[i].isBusy()) 
+                return i+1;
+            END IF
+        END FOR
+
+        return ret;
+    }
+
+    /*
+     * kontrolliert ob alle bplants fertig sind
+     */
+    private boolean bPlantsDone() {
+        FOR(int i=0; i<bplants.length; i++) 
+            IF(CALL bplants[i].isBusy()) 
+                return false;
+            END IF
+        END FOR
+
+        return true;
+    }
+
+     boolean done() {
+        return done;
+    }
+
+    @Override
+     String toString() {
+        DECLARE temp_N = (Simulation.TEST) ? JUnitTestframe.N : Simulation.N;
+
+        StringBuilder ret = NEWOBJECT StringBuilder();
+
+         FOR(DECLARE int i=0; i<temp_N+2; i++) 
+           CALL ret.append('#');
+         END FOR
+        CALL ret.append('\n');
+
+        FOR(int y=0; y<warehouse.length; y++) 
+            CALL ret.append('#');
+
+            FOR(int x=0; x<warehouse.length; x++) 
+                IF(CALL warehouse[y][x].hasRobots() > 1) 
+					CALL ret.append('X');
+                }END IF 
+				ELSE IF(CALL warehouse[y][x].hasRobots() == 1) {
+                    CALL ret.append(CALL warehouse[y][x].robotID());
+                }END IF 
+				ELSE {
+                    IF(CALL warehouse[y][x].isBoxingPlant()) {
+                       CALL ret.append('B');
+                    }END IF 
+					ELSE {
+                      CALL  ret.append('.');
+                    }END ELSE 
+                }END ELSE
+            }END FOR
+
+			CALL ret.append("#\n");
+        }
+
+        FOR(int i=0; i<temp_N+2; i++) 
+           CALL ret.append('#');
+        END FOR
+       CALL ret.append('\n');
+
+        return CALL ret.toString();
+    }
+
+     void toStringSuper() {
+        System.out.printf("\n#################################################################\n");
+        FOR(int y=0; y<warehouse.length; y++) 
+            System.out.printf("#");
+            FOR(int x=0; x<warehouse[y].length; x++) 
+                IF ((warehouse[y][x] == null))
+                    PRINT "\tXX\t#"
+                END IF
+					ELSE IF(warehouse[y][x].isBoxingPlant()) 
+                    PRINT "\tXB %d\t#", (CALL(BoxingPlant)warehouse[y][x]).id())
+				END ELSE IF  
+					ELSE
+					PRINT"\tXS %d\t#", (CALL CALL(StorageArea)warehouse[y][x]).item().id())
+                END ELSE
+            END FOR
+            PRINT "\n#################################################################\n"
+        END FOR
+    }
+ 
+  
+END CLASS

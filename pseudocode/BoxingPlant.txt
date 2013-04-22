@@ -1,0 +1,8 @@
+public interface BoxingPlant extends Field {
+  //BoxingPlant SETUP  
+    DECLARE public int id();
+    DECLARE boolean isBusy();
+    DECLARE void receiveOrder(Map<Item, Integer> order);
+    DECLARE void action();
+
+END CLASS

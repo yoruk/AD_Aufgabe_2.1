@@ -1,0 +1,59 @@
+public class StorageAreaImpl implements StorageArea {
+ //StorageAreaImpl SETUP  
+	DECLARE int amountOfRobots;
+    DECLARE int coordinateX;
+    DECLARE int coordinateY;
+    DECLARE Item item;
+    DECLARE int robotId;
+	
+	//FieldImpl PROCEDURE
+	
+     StorageAreaImpl(Item item) {
+        amountOfRobots = 0;
+
+        coordinateX =CALL item.productPosX();
+        coordinateY =CALL  item.productPosY();
+
+        this.item = item;
+    }
+
+     int hasRobots() {
+        return amountOfRobots;
+    }
+
+     int coordinateX() {
+        return coordinateX;
+    }
+
+     int coordinateY() {
+        return coordinateY;
+    }
+
+     boolean isBoxingPlant() {
+        return false;
+    }
+
+     Item item() {
+        return item;
+    }
+
+    @Override
+     String toString() {
+        return "SorageAreaImpl: x/y: " + coordinateX + "/" + coordinateY + " Item:" + item;
+    }
+
+     void reg(Robot bot) {
+         amountOfRobots++;
+         this.robotId = CALL bot.id();
+    }
+
+     void unReg() {
+        amountOfRobots--;
+       this.robotId = 0;
+    }
+
+     int robotID() {
+        return robotId;
+    }
+}
+END CLASS

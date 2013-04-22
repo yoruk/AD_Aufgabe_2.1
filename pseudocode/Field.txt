@@ -1,0 +1,10 @@
+public class Field {
+  //Field SETUP  
+	DECLARE  int hasRobots();
+    DECLARE void reg(Robot bot);
+    DECLARE void unReg();
+    DECLARE int robotID();
+    DECLARE int coordinateX();
+    DECLARE int coordinateY();
+    DECLARE boolean isBoxingPlant();
+END CLASS

@@ -1,0 +1,118 @@
+public class  BoxingPlantImpl implements BoxingPlant {
+  //BoxingPlant  SETUP 
+	DECLARE int amountOfRobots;
+	DECLARE int coordinateX;
+	DECLARE int coordinateY;
+	DECLARE final int ID;
+	DECLARE int robotId;
+	DECLARE Robot robot;
+	DECLARE Map<Item, Integer> order;
+	DECLARE boolean busy;
+	DECLARE int packingTime;
+	DECLARE final int temp_PPTIME = (Simulation.TEST) ? JUnitTestframe.PPTIME : Simulation.PPTIME;
+	DECLARE final int temp_CLTIME = (Simulation.TEST) ? JUnitTestframe.CLTIME : Simulation.CLTIME;
+	DECLARE int temp_CLTIME_cnt = temp_CLTIME;
+	DECLARE DecimalFormat df = NEWOBJECT DecimalFormat("00");
+	
+    BoxingPlantImpl(int id, int x, int y, Robot bot) {
+		robot = bot;
+		robotId = CALL  bot.id();
+		amountOfRobots = 1;
+		busy = false;
+		coordinateX = x;
+		coordinateY = y;
+		ID = id;
+	}
+
+	 void action() {
+		// wenn eine bestellung vorliegt und der robot nicht unterwegs ist
+		IF(order != null && CALL !robot.isBusy()) 
+			// gib robot bestellung
+			// und loesche bestellliste
+		    PRINT("BoxingPlant [" + df.format(CALL this.id()) + "]: Bekomme Order " + CALL order.toString());
+			CALL robot.receiveOrder(order);
+			order = null;
+		END IF
+
+		// wenn der roboter unterwegs ist, wird nur eine action 
+		// nach ablauf des counters ausgeloest
+		IF(order == null && CALL robot.isBusy() && temp_CLTIME_cnt-1 != 0) 
+			temp_CLTIME_cnt--;
+		END IF
+			ELSE
+			CALL robot.action();
+
+			temp_CLTIME_cnt = temp_CLTIME;
+		END ELSE 
+
+		// wenn keine bestelliste vorliegt, robot nicht(mehr) unterwegs ist
+		// aber packingTime > 0 --> es muss eine bestellung verpackt werden 
+		IF(order == null && !robot.isBusy() && packingTime != 0) 
+			System.out.println("BoxingPlant " + ID + " packt");
+
+			packingTime--;
+		END IF
+
+		// nach dem verpacken ist die bplant fertig
+		IF(order == null && CALL !robot.isBusy() && packingTime == 0)			
+			busy = false;
+		END IF
+	}
+
+	/*
+	 * nimmt bestellen des warehouses entgegen 
+	 */
+	public void receiveOrder(Map<Item, Integer> order) {
+		// Bestellung entgegennehmen
+		this.order = order;
+
+		// das gesamtgewicht merken
+		FOR (Entry<Item, Integer> element : CALL order.entrySet()) 
+            packingTime += CALL element.getValue();
+        END FOR
+
+		// reale packzeit ausrechnen
+		packingTime *= temp_PPTIME;
+
+		// zustand of busy setzen
+		busy = true;
+	}
+
+	 int hasRobots() {
+		return amountOfRobots;
+	}
+
+	 int coordinateX() {
+		return coordinateX;
+	}
+
+	 int coordinateY() {
+		return coordinateY;
+	}
+
+	 boolean isBoxingPlant() {
+		return true;
+	}
+
+	 int id() {
+		return ID;
+	}
+
+	 boolean isBusy() {
+		return busy;
+	}
+
+	 void reg(Robot bot) {
+		 amountOfRobots++;
+		 this.robotId = CALL bot.id();
+	}
+
+	 void unReg() {
+		amountOfRobots--;
+        this.robotId = 0;
+	}
+
+	 int robotID() {
+		return robotId;
+	}
+END CLASS
