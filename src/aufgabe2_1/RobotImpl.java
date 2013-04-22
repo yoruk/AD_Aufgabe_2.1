@@ -16,8 +16,9 @@ public class RobotImpl implements Robot {
 	private Map<Item, Integer> order;
 	private Random random = new Random();
 	private DecimalFormat df = new DecimalFormat("00");
-
-public RobotImpl(int id, int startPosX, int startPosY, Field[][] field) {
+	private Status status;
+	
+	public RobotImpl(int id, int startPosX, int startPosY, Field[][] field) {
         this.id = id;
         this.startPosX = startPosX;
         this.startPosY = startPosY;
@@ -25,6 +26,7 @@ public RobotImpl(int id, int startPosX, int startPosY, Field[][] field) {
         this.currentPosY = startPosY;
         this.field = field;
         busy = false;
+        this.status = Status.IDLE;
     }
 
     public int id() {
@@ -230,6 +232,31 @@ public RobotImpl(int id, int startPosX, int startPosY, Field[][] field) {
                 break;
             }
         }
+    }
+    
+    @Override
+    public int getStartPosX() {
+    	return this.startPosX;
+    }
+    
+    @Override
+    public int getStartPosY() {
+    	return this.startPosY;
+    }
+    
+    @Override
+    public int getCurrentPosX() {
+    	return this.currentPosX;
+    }
+    
+    @Override
+    public int getCurrentPosY() {
+    	return this.currentPosY;
+    }
+    
+    @Override
+    public Status getStatus() {
+    	return this.status;
     }
 }
 

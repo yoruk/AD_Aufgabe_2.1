@@ -7,4 +7,9 @@ public interface BoxingPlant extends Field {
 	public boolean isBusy();
 	public void receiveOrder(Map<Item, Integer> order);
 	public void action();
+	
+	//JUnit
+	public Robot getRobot();
+	public int getAmountOfRobots();
+	public Status getStatus();
 }

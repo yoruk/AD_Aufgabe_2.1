@@ -17,7 +17,8 @@ public class BoxingPlantImpl implements BoxingPlant {
 	private final int temp_PPTIME = (Simulation.TEST) ? JUnitTestframe.PPTIME : Simulation.PPTIME;
 	private final int temp_CLTIME = (Simulation.TEST) ? JUnitTestframe.CLTIME : Simulation.CLTIME;
 	private int temp_CLTIME_cnt = temp_CLTIME;
-	private DecimalFormat df = new DecimalFormat("00");	
+	private DecimalFormat df = new DecimalFormat("00");
+	private Status status;
 
 	public BoxingPlantImpl(int id, int x, int y, Robot bot) {
 		robot = bot;
@@ -27,6 +28,7 @@ public class BoxingPlantImpl implements BoxingPlant {
 		coordinateX = x;
 		coordinateY = y;
 		ID = id;
+		this.status = Status.IDLE;
 	}
 	
 	public void action() {
@@ -118,5 +120,17 @@ public class BoxingPlantImpl implements BoxingPlant {
 
 	public int robotID() {
 		return robotId;
+	}
+	
+	public Robot getRobot() {
+		return robot;
+	}
+	
+	public int getAmountOfRobots() {
+		return amountOfRobots;
+	}
+	
+	public Status getStatus() {
+		return status;
 	}
 }

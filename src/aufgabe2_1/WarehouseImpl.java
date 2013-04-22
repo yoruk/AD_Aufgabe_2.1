@@ -221,4 +221,20 @@ public class WarehouseImpl implements Warehouse {
     		return toStringMini();
     	}
     }
+    
+    @Override
+
+    public Field[][] getWarehouseArr() {
+    	return this.warehouse;
+    }
+    
+    @Override
+    public Queue<Map<Item, Integer>> getOrderQueue() {
+    	return this.orderQueue;
+    }
+    
+    @Override
+    public BoxingPlant[] getBplants() {
+    	return this.bplants;
+    }
 }

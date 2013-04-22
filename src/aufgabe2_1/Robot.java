@@ -7,4 +7,11 @@ public interface Robot {
 	public void action();
 	public boolean isBusy();
 	public void receiveOrder(Map<Item, Integer> order);
+	
+	//JUnit
+	public int getStartPosX();
+	public int getStartPosY();
+	public int getCurrentPosX();
+	public int getCurrentPosY();
+	public Status getStatus();
 }
