@@ -13,6 +13,7 @@ public class RobotImpl implements Robot {
 	private int currentPosY;
 	private boolean busy;
 	private Map<Item, Integer> order;
+	private Random random = new Random();
 	
 public RobotImpl(int id, int startPosX, int startPosY, Field[][] field) {
         this.id = id;
@@ -92,106 +93,128 @@ public RobotImpl(int id, int startPosX, int startPosY, Field[][] field) {
         }
         return false;
     }
+    
+    private int rand(){
+    	return random.nextBoolean() ? 1: -1;
+    }
 
     private void evade(int y, int x) {
-        int tmp = (int) ((Math.random()) * 101);
-        if (tmp < 20) {
-            if (currentPosY != lastPosY && currentPosX + 1 != lastPosX
-                    && fieldFree(currentPosY, currentPosX + 1)) {
-            moveTo(currentPosY, currentPosX + 1);
-            } else if (currentPosY - 1 != lastPosY
-                    && currentPosX != lastPosX
-                    && fieldFree(currentPosY - 1, currentPosX)) {
-            moveTo(currentPosY - 1, currentPosX);
-            } else if (currentPosY != lastPosY
-                    && currentPosX - 1 != lastPosX
-                    && fieldFree(currentPosY, currentPosX - 1)) {
-            moveTo(currentPosY, currentPosX - 1);
-            } else if (currentPosY + 1 != lastPosY
-                    && currentPosX != lastPosX
-                    && fieldFree(currentPosY + 1, currentPosX)) {
-            moveTo(currentPosY + 1, currentPosX);
-            } else if (fieldFree(lastPosY, lastPosX)) {
-            moveTo(lastPosY, lastPosX);
-            }
-        } else if (tmp < 40) {
-            if (currentPosY+1 != lastPosY && currentPosX  != lastPosX
-                    && fieldFree(currentPosY+1, currentPosX )) {
-            moveTo(currentPosY+1, currentPosX );
-            } else if (currentPosY + 1 != lastPosY
-                    && currentPosX != lastPosX
-                    && fieldFree(currentPosY + 1, currentPosX)) {
-            moveTo(currentPosY + 1, currentPosX);
-            } else if (currentPosY != lastPosY
-                    && currentPosX - 1 != lastPosX
-                    && fieldFree(currentPosY, currentPosX - 1)) {
-            moveTo(currentPosY, currentPosX - 1);
-            } else if (currentPosY - 1 != lastPosY
-                    && currentPosX != lastPosX
-                    && fieldFree(currentPosY - 1, currentPosX)) {
-            moveTo(currentPosY - 1, currentPosX);
-            } else if (fieldFree(lastPosY, lastPosX)) {
-            moveTo(lastPosY, lastPosX);
-            }
-        } else if (tmp < 60) {
-            if (currentPosY != lastPosY && currentPosX - 1 != lastPosX
-                    && fieldFree(currentPosY, currentPosX - 1)) {
-            moveTo(currentPosY, currentPosX - 1);
-            } else if (currentPosY - 1 != lastPosY
-                    && currentPosX != lastPosX
-                    && fieldFree(currentPosY - 1, currentPosX)) {
-            moveTo(currentPosY - 1, currentPosX);
-            } else if (currentPosY != lastPosY
-                    && currentPosX - 1 != lastPosX
-                    && fieldFree(currentPosY, currentPosX - 1)) {
-            moveTo(currentPosY, currentPosX - 1);
-            } else if (currentPosY + 1 != lastPosY
-                    && currentPosX != lastPosX
-                    && fieldFree(currentPosY + 1, currentPosX)) {
-            moveTo(currentPosY + 1, currentPosX);
-            } else if (fieldFree(lastPosY, lastPosX)) {
-            moveTo(lastPosY, lastPosX);
-            }
-        } else if (tmp < 80) {
-            if (currentPosY != lastPosY && currentPosX + 1 != lastPosX
-                    && fieldFree(currentPosY, currentPosX + 1)) {
-            moveTo(currentPosY, currentPosX + 1);
-            } else if (currentPosY - 1 != lastPosY
-                    && currentPosX != lastPosX
-                    && fieldFree(currentPosY - 1, currentPosX)) {
-            moveTo(currentPosY - 1, currentPosX);
-            } else if (currentPosY != lastPosY
-                    && currentPosX - 1 != lastPosX
-                    && fieldFree(currentPosY, currentPosX - 1)) {
-            moveTo(currentPosY, currentPosX - 1);
-            } else if (currentPosY + 1 != lastPosY
-                    && currentPosX != lastPosX
-                    && fieldFree(currentPosY + 1, currentPosX)) {
-            moveTo(currentPosY + 1, currentPosX);
-            } else if (fieldFree(lastPosY, lastPosX)) {
-            moveTo(lastPosY, lastPosX);
-            }
-        } else {
-            if (currentPosY != lastPosY && currentPosX + 1 != lastPosX
-                    && fieldFree(currentPosY, currentPosX + 1)) {
-            moveTo(currentPosY, currentPosX + 1);
-            } else if (currentPosY - 1 != lastPosY
-                    && currentPosX != lastPosX
-                    && fieldFree(currentPosY - 1, currentPosX)) {
-            moveTo(currentPosY - 1, currentPosX);
-            } else if (currentPosY != lastPosY
-                    && currentPosX - 1 != lastPosX
-                    && fieldFree(currentPosY, currentPosX - 1)) {
-            moveTo(currentPosY, currentPosX - 1);
-            } else if (currentPosY + 1 != lastPosY
-                    && currentPosX != lastPosX
-                    && fieldFree(currentPosY + 1, currentPosX)) {
-            moveTo(currentPosY + 1, currentPosX);
-            } else if (fieldFree(lastPosY, lastPosX)) {
-            moveTo(lastPosY, lastPosX);
-            }
-        }
+    	int rand = rand();
+    	int rand2 = (rand == -1) ? 1 : -1;
+
+    	if (currentPosY != lastPosY && currentPosX + rand != lastPosX && fieldFree(currentPosY, currentPosX + rand)) {
+    		moveTo(currentPosY, currentPosX + rand);
+    	} else if (currentPosY + rand != lastPosY && currentPosX != lastPosX && fieldFree(currentPosY + rand, currentPosX)) {
+    		moveTo(currentPosY + rand, currentPosX);
+    	} else if (currentPosY != lastPosY && currentPosX + rand2 != lastPosX && fieldFree(currentPosY, currentPosX + rand2)) {
+    		moveTo(currentPosY, currentPosX + rand2);
+    	} else if (currentPosY - rand != lastPosY && currentPosX != lastPosX && fieldFree(currentPosY - rand, currentPosX)) {
+    		moveTo(currentPosY - rand, currentPosX);
+    	} else if (fieldFree(lastPosY, lastPosX)) {
+    		moveTo(lastPosY, lastPosX);
+    	}
     }
+
+
+//    private void evade(int y, int x) {
+//        int tmp = (int) ((Math.random()) * 101);
+//        if (tmp < 20) {
+//            if (currentPosY != lastPosY && currentPosX + 1 != lastPosX
+//                    && fieldFree(currentPosY, currentPosX + 1)) {
+//            moveTo(currentPosY, currentPosX + 1);
+//            } else if (currentPosY - 1 != lastPosY
+//                    && currentPosX != lastPosX
+//                    && fieldFree(currentPosY - 1, currentPosX)) {
+//            moveTo(currentPosY - 1, currentPosX);
+//            } else if (currentPosY != lastPosY
+//                    && currentPosX - 1 != lastPosX
+//                    && fieldFree(currentPosY, currentPosX - 1)) {
+//            moveTo(currentPosY, currentPosX - 1);
+//            } else if (currentPosY + 1 != lastPosY
+//                    && currentPosX != lastPosX
+//                    && fieldFree(currentPosY + 1, currentPosX)) {
+//            moveTo(currentPosY + 1, currentPosX);
+//            } else if (fieldFree(lastPosY, lastPosX)) {
+//            moveTo(lastPosY, lastPosX);
+//            }
+//        } else if (tmp < 40) {
+//            if (currentPosY+1 != lastPosY && currentPosX  != lastPosX
+//                    && fieldFree(currentPosY+1, currentPosX )) {
+//            moveTo(currentPosY+1, currentPosX );
+//            } else if (currentPosY + 1 != lastPosY
+//                    && currentPosX != lastPosX
+//                    && fieldFree(currentPosY + 1, currentPosX)) {
+//            moveTo(currentPosY + 1, currentPosX);
+//            } else if (currentPosY != lastPosY
+//                    && currentPosX - 1 != lastPosX
+//                    && fieldFree(currentPosY, currentPosX - 1)) {
+//            moveTo(currentPosY, currentPosX - 1);
+//            } else if (currentPosY - 1 != lastPosY
+//                    && currentPosX != lastPosX
+//                    && fieldFree(currentPosY - 1, currentPosX)) {
+//            moveTo(currentPosY - 1, currentPosX);
+//            } else if (fieldFree(lastPosY, lastPosX)) {
+//            moveTo(lastPosY, lastPosX);
+//            }
+//        } else if (tmp < 60) {
+//            if (currentPosY != lastPosY && currentPosX - 1 != lastPosX
+//                    && fieldFree(currentPosY, currentPosX - 1)) {
+//            moveTo(currentPosY, currentPosX - 1);
+//            } else if (currentPosY - 1 != lastPosY
+//                    && currentPosX != lastPosX
+//                    && fieldFree(currentPosY - 1, currentPosX)) {
+//            moveTo(currentPosY - 1, currentPosX);
+//            } else if (currentPosY != lastPosY
+//                    && currentPosX - 1 != lastPosX
+//                    && fieldFree(currentPosY, currentPosX - 1)) {
+//            moveTo(currentPosY, currentPosX - 1);
+//            } else if (currentPosY + 1 != lastPosY
+//                    && currentPosX != lastPosX
+//                    && fieldFree(currentPosY + 1, currentPosX)) {
+//            moveTo(currentPosY + 1, currentPosX);
+//            } else if (fieldFree(lastPosY, lastPosX)) {
+//            moveTo(lastPosY, lastPosX);
+//            }
+//        } else if (tmp < 80) {
+//            if (currentPosY != lastPosY && currentPosX + 1 != lastPosX
+//                    && fieldFree(currentPosY, currentPosX + 1)) {
+//            moveTo(currentPosY, currentPosX + 1);
+//            } else if (currentPosY - 1 != lastPosY
+//                    && currentPosX != lastPosX
+//                    && fieldFree(currentPosY - 1, currentPosX)) {
+//            moveTo(currentPosY - 1, currentPosX);
+//            } else if (currentPosY != lastPosY
+//                    && currentPosX - 1 != lastPosX
+//                    && fieldFree(currentPosY, currentPosX - 1)) {
+//            moveTo(currentPosY, currentPosX - 1);
+//            } else if (currentPosY + 1 != lastPosY
+//                    && currentPosX != lastPosX
+//                    && fieldFree(currentPosY + 1, currentPosX)) {
+//            moveTo(currentPosY + 1, currentPosX);
+//            } else if (fieldFree(lastPosY, lastPosX)) {
+//            moveTo(lastPosY, lastPosX);
+//            }
+//        } else {
+//            if (currentPosY != lastPosY && currentPosX + 1 != lastPosX
+//                    && fieldFree(currentPosY, currentPosX + 1)) {
+//            moveTo(currentPosY, currentPosX + 1);
+//            } else if (currentPosY - 1 != lastPosY
+//                    && currentPosX != lastPosX
+//                    && fieldFree(currentPosY - 1, currentPosX)) {
+//            moveTo(currentPosY - 1, currentPosX);
+//            } else if (currentPosY != lastPosY
+//                    && currentPosX - 1 != lastPosX
+//                    && fieldFree(currentPosY, currentPosX - 1)) {
+//            moveTo(currentPosY, currentPosX - 1);
+//            } else if (currentPosY + 1 != lastPosY
+//                    && currentPosX != lastPosX
+//                    && fieldFree(currentPosY + 1, currentPosX)) {
+//            moveTo(currentPosY + 1, currentPosX);
+//            } else if (fieldFree(lastPosY, lastPosX)) {
+//            moveTo(lastPosY, lastPosX);
+//            }
+//        }
+//    }
 
     private void load() {
         System.out.println("Lade item Robot: " + id);
@@ -228,14 +251,22 @@ public RobotImpl(int id, int startPosX, int startPosY, Field[][] field) {
      *            -1 nach Westen fahren +1 nach Osten fahren
      */
     private boolean tryMove(int y, int x) {
-        if (fieldFree(currentPosY + y, currentPosX + x)) {
-            moveTo(currentPosY + y, currentPosX + x);
-            return true;
-        } else {
-            evade(y, x);
-            return false;
-        }
-    }
+    	if (fieldFree(currentPosY + y, currentPosX + x)) {
+    		moveTo(currentPosY + y, currentPosX + x);
+    		return true;
+    	} else if (fieldFree(currentPosY - 1, currentPosX) && field[currentPosY + 1][currentPosX].isBoxingPlant()) {
+    		if (id < currentPosX && fieldFree(currentPosY, currentPosX - 1)) {
+    			moveTo(currentPosY, currentPosX - 1);
+    			return true;
+    		}else if (id > currentPosX && fieldFree(currentPosY, currentPosX + 1)) {
+    			moveTo(currentPosY, currentPosX + 1);
+    			return true;
+    		}
+    	}
+	
+    	evade(y, x);
+    	return false;
+	}
 
     /**
      * entfernt das erste objekt aus der Order
