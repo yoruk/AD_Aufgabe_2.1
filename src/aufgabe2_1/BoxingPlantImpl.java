@@ -7,12 +7,12 @@ public class BoxingPlantImpl implements BoxingPlant {
 	private int amountOfRobots;
 	private int coordinateX;
 	private int coordinateY;
-	private int id;
+	private final int id;
 	private int robotId;
 	private Robot robot;
 	private Map<Item, Integer> order;
 	private boolean busy;
-	private int amountOfItems;
+	private int packingTime;
 	
 	public BoxingPlantImpl(int id, int x, int y, Robot bot) {
 		robot = bot;
@@ -21,45 +21,32 @@ public class BoxingPlantImpl implements BoxingPlant {
 		busy = false;
 		coordinateX = x;
 		coordinateY = y;
+		this.id = id;
 	}
 	
 	public void action() {
+//	    System.out.println("Action Boxinplant");
+//	    System.out.println("Boxingplant1:" + order.toString());
 		// wenn eine bestellung vorliegt und der robot nicht unterwegs ist
 		if(order != null && !robot.isBusy()) {
 			// gib robot bestellung
 			// und loesche bestellliste
+		    System.out.println("Boxingplant:" + order.toString());
 			robot.receiveOrder(order);
 			order = null;
 			
 		// wenn keine bestelliste vorliegt, robot nicht(mehr) unterwegs ist
 		// aber amountOfItems > 0 --> es muss eine bestellung verpackt werden 
-		} else if(order == null && !robot.isBusy() && amountOfItems != 0) {
-			packOrder();
-			amountOfItems = 0;
+		} else if(order == null && !robot.isBusy() && packingTime != 0) {
+		    System.out.println("Packen BosingStation:"+id);
+			packingTime--;
 			busy = false;
+		} 
+		if(packingTime > 0) {
+		    robot.action();
 		}
- 		
-		robot.action();
 	}
-	
-	/*
-	 * verpackt die einzelnen items
-	 * verpackungszeit = PPTIME * amountOfItems
-	 */
-	private void packOrder() {
-		int temp_PPTIME = (Simulation.TEST) ? JUnitTestframe.PPTIME * 1000 : Simulation.PPTIME * 1000;
-		
-		for(int i=0; i<amountOfItems; i++) {
-			 try {
-				 Thread.sleep(temp_PPTIME);
-			 } catch(Exception e) {
-				 System.out.println("Es ist eine Exception in packOrder() aufgetreten!");
-			 }
-		}
-		
-		amountOfItems = 0;
-		busy = false;
-	}
+
 	/*
 	 * nimmt bestellen des warehouses entgegen 
 	 */
@@ -69,7 +56,7 @@ public class BoxingPlantImpl implements BoxingPlant {
 		
 		// das gesamtgewicht merken
 		for (Entry<Item, Integer> element : order.entrySet()) {
-            amountOfItems += element.getValue();
+            packingTime += element.getValue();
         }
 		
 		// zustand of busy setzen

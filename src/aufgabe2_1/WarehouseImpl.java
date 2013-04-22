@@ -8,7 +8,7 @@ public class WarehouseImpl implements Warehouse {
 	private BoxingPlant[] bplants;
 	private boolean done;
 	
-	public WarehouseImpl() {
+	public WarehouseImpl(List<Item> itemList) {
 		int temp_N = (Simulation.TEST) ? JUnitTestframe.N : Simulation.N;
 		int temp_NUMBOXINGPLANTS = (Simulation.TEST) ? JUnitTestframe.NUMBOXINGPLANTS : Simulation.NUMBOXINGPLANTS;
 		
@@ -19,7 +19,7 @@ public class WarehouseImpl implements Warehouse {
 		
 		// Alle vorgesehene Fields mit StorageAreaImpl initialisieren
 		// und Items zuweisen
-		List<Item> itemlist = Item.factory();
+		List<Item> itemlist = itemList;
 		for(Item i : itemlist) {
 			warehouse[i.productPosY()][i.productPosX()] = new StorageAreaImpl(i);
 		}

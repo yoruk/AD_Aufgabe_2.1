@@ -36,8 +36,8 @@ public class Test {
 	public static void testWarehouseImpl_factory() {
 		System.out.println("\ntestWarehouseImpl_factory()\n");
 		
-		Warehouse wh = new WarehouseImpl();
-		System.out.println(wh);
+//		Warehouse wh = new WarehouseImpl();
+//		System.out.println(wh);
 	}
 
 	public static void main(String[] args) {
