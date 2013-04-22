@@ -1,9 +1,5 @@
-package aufgabe2_1;
-
-import java.util.Map;
-
 public interface Robot {
-	
+
 	/* 
 	 * Eingabe:  keine
 	 * 
@@ -42,11 +38,4 @@ public interface Robot {
 	 * Funktion: gibt dem Robot eine neue Order
 	 */
 	public void receiveOrder(Map<Item, Integer> order);
-	
-	//JUnit
-	public int getStartPosX();
-	public int getStartPosY();
-	public int getCurrentPosX();
-	public int getCurrentPosY();
-	public Status getStatus();
 }

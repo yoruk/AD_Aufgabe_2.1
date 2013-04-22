@@ -44,7 +44,7 @@ public class WarehouseImpl implements Warehouse {
 //		}
 		for(int i=0; i<warehouse[temp_N-1].length; i++) {
 			if(warehouse[temp_N-1][i] == null) {
-			    if(i < Simulation.NUMBOXINGPLANTS) {
+			    if(i < temp_NUMBOXINGPLANTS) {
 				tmpBot = new RobotImpl(count, i, temp_N-1, warehouse);
 				warehouse[temp_N-1][i] = new BoxingPlantImpl(count, i, temp_N-1, tmpBot);
 				bplants[count-1] = (BoxingPlant)warehouse[temp_N-1][i];

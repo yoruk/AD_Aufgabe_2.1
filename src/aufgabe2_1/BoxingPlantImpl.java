@@ -54,7 +54,7 @@ public class BoxingPlantImpl implements BoxingPlant {
 		// wenn keine bestelliste vorliegt, robot nicht(mehr) unterwegs ist
 		// aber packingTime > 0 --> es muss eine bestellung verpackt werden 
 		if(order == null && !robot.isBusy() && packingTime != 0) {
-			System.out.println("BoxingPlant " + ID + " packt");
+			System.out.println("BoxingPlant [" + df.format(this.id()) + "]: Verpacke Order");
 			
 			packingTime--;
 		} 

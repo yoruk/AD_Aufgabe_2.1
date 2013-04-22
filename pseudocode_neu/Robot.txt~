@@ -1,0 +1,43 @@
+public interface Robot {
+
+	/* 
+	 *Eingabe:
+	 *Ausgabe:
+	 *Funktion: Gibt die ID des Robot zuruck
+	 */
+	public int id();
+
+	/*
+	 *Eingabe: eine Map die Item und Iteger enthalt
+	 *Ausgabe:
+	 *Funktion: gibt dem Robot eine neue Order
+	 */
+	public void receiveOrder(Map<Item, Integer> order);
+
+	/*Eingabe: eine Map die Item und Iteger enthalt
+	 *Ausgabe:
+	 *Funktion: Mit dieser Methode wird dem Warehouse 
+	 * 	    ein Taksignal gegeben. Bei einem Taktsignal
+	 * 	    wird ein Uebergang in den naechsten Zustand herbeigefuehrt
+	 *
+	 * 	    Wenn der Robot eine Order hat Arbeitet er alle Items in der liste ab und 
+	 * 	    wenn die Order leer ist fahrt er zuruck zu seiner Startposition
+	 * 	    Setzt busy auf true wenn er eine Order hat und auf false wenn er
+	 * 	    seine Startposition wieder erreicht hat
+	 */
+	public void action();
+
+	/* 
+	 *Eingabe:
+	 *Ausgabe:
+	 *Funktion: Zum abfragen ob der Robot beschaftigt ist
+	 */
+	public boolean isBusy();
+
+	/* 
+	 *Eingabe:
+	 *Ausgabe:
+	 *Funktion: Gibt dem Robot eine neue Order
+	 */
+	public void receiveOrder(Map<Item, Integer> order);
+}
