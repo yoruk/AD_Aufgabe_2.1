@@ -11,7 +11,7 @@ public class Simulation {
 	public static final int PPTIME = 5;
 	public static boolean TEST = false;
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
         
         List<Item> item = Item.factory();
         Warehouse wh = new WarehouseImpl(item);
@@ -36,17 +36,16 @@ public class Simulation {
 //        System.out.println(order.toString());
 //        wh.toStringSuper();
         
-      int i=0;
+        int i=0;
         while (!wh.done() && i < 3000) {
             wh.action();
             System.out.print(wh.toString());
+            
+            Thread.sleep(100);
+            
             i++;
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }        }
+        }
+        
         System.out.println(i);
         System.out.println(wh.done());
     }

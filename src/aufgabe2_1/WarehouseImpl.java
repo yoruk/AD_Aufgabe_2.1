@@ -7,6 +7,10 @@ public class WarehouseImpl implements Warehouse {
 	private Queue<Map<Item, Integer>> orderQueue;
 	private BoxingPlant[] bplants;
 	private boolean done;
+
+	public WarehouseImpl() {
+		new WarehouseImpl(Item.factory());
+	}
 	
 	public WarehouseImpl(List<Item> itemList) {
 		int temp_N = (Simulation.TEST) ? JUnitTestframe.N : Simulation.N;
