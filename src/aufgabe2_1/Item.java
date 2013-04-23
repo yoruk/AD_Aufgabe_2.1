@@ -32,6 +32,15 @@ public class Item {
     	return item_id;
     }
     
+    /*
+     * Eingabe:  keine
+     * 
+     * Ausgabe:  Eine Liste von Items. Die Anzahl entspricht der Anzahl in
+     *           Warehouse freien Plaetze btw der Storage-Areas.
+     *           Die Gewichtsangaben sind random.
+     *           Die Ids und die Koordinaten sind fortlaufen 
+     *           und decken sich mit den fuer die Items erstellten Storageareas. 
+     */
     public static List<Item> factory() {
     	int temp_N = (Simulation.TEST) ? JUnitTestframe.N : Simulation.N;
     	int temp_NUMBOXINGPLANTS = (Simulation.TEST) ? JUnitTestframe.NUMBOXINGPLANTS : Simulation.NUMBOXINGPLANTS;

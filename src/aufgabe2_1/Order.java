@@ -21,6 +21,20 @@ public class Order {
     	return order;
     }
 
+    /*
+     * Eingabe:  Mit Item.factory oder per Hand erstellte Item-Liste.
+     * 
+     * Ausgabe:  Eine Map mit mehreren Eintraegen, die die Items als Key
+     * 			 und die Anzahl eines Items als Value enthaelt.
+     * 
+     * Funktion: Es wird zufaellig eine Item-Id von einem in der Liste
+     *           enthaltenem Item erstellt. Dieses Item wird aus der Liste geholt.
+     *           Wenn das Item zu schwer ist wird es verworfen,
+     *           ansonsten wird es der Map hinzugefuegt und die Anzahl des Items
+     *           auf 1 gesetzt. Falls ein Item doppelt gezogen wird,
+     *           wird die Anzahl in der Map erhoeht.
+     *           
+     */
     public static Map<Item, Integer> factory(List<Item> items) {
     	int temp_ORDERMAXSIZE = (Simulation.TEST) ? JUnitTestframe.ORDERMAXSIZE : Simulation.ORDERMAXSIZE;
     	

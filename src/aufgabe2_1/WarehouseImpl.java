@@ -33,22 +33,27 @@ public class WarehouseImpl implements Warehouse {
 		// und RobotImpl zuweisen
 		Robot tmpBot;
 		int count = 1;
-
-//		for(int i=0; i<warehouse[temp_N-1].length; i++) {
-//			if(warehouse[temp_N-1][i] == null) {
-//				tmpBot = new RobotImpl(count, i, temp_N-1, warehouse);
-//				warehouse[temp_N-1][i] = new BoxingPlantImpl(count, i, temp_N-1, tmpBot);
-//				bplants[count-1] = (BoxingPlant)warehouse[temp_N-1][i];
-//				count++;
-//			}
-//		}
+		
+		// temp_N-1 = letzte zeile
 		for(int i=0; i<warehouse[temp_N-1].length; i++) {
+			
+			// nur zuweisungen bei null vornehmen
 			if(warehouse[temp_N-1][i] == null) {
-			    if(i < temp_NUMBOXINGPLANTS) {
-				tmpBot = new RobotImpl(count, i, temp_N-1, warehouse);
-				warehouse[temp_N-1][i] = new BoxingPlantImpl(count, i, temp_N-1, tmpBot);
-				bplants[count-1] = (BoxingPlant)warehouse[temp_N-1][i];
-			    } else {
+			    
+				if(i < temp_NUMBOXINGPLANTS) {
+				
+					// robot erstellen
+					tmpBot = new RobotImpl(count, i, temp_N-1, warehouse);
+					
+					// boxingplant erstellen
+					warehouse[temp_N-1][i] = new BoxingPlantImpl(count, i, temp_N-1, tmpBot);
+					
+					// extra referenz fuer schnelleren zugriff auf boxingplant erstellen
+					bplants[count-1] = (BoxingPlant)warehouse[temp_N-1][i];
+			    
+				} else {
+					
+					// fake boxingplant erstellen
 			        warehouse[temp_N-1][i] = new FieldImpl();
 			    }
 				count++;
@@ -57,18 +62,16 @@ public class WarehouseImpl implements Warehouse {
 	}
 	
 	public void action() {
-		int idle; // index fuer eine bPlant die idle ist
+		// index fuer eine bPlant die idle ist
+		int idle;
 		
 		// wenn alle bPlants fertig sind 
 		// und keine weiteren bestelungen vorliegen
 		if(bPlantsDone() && orderQueue.isEmpty()) {
             done = true;
-        
-        // wenn bestellungen vorliegen
         }
 
-		
-		// alle bPlants das action-signal geben
+		// wenn bestellungen vorliegen
 		for(int i=0; i<bplants.length; i++) {
 		       if(!orderQueue.isEmpty()) {
 		            // freie bPlant suchen
@@ -78,14 +81,17 @@ public class WarehouseImpl implements Warehouse {
 		            if(idle != 0) {
 		                bplants[idle-1].receiveOrder(orderQueue.remove());
 		            }
-		        }
+		       }
 		      
-			bplants[i].action();
+		       // allen bplants nacheinander action-signal geben
+		       bplants[i].action();
 		}
 	}
 	
 	public void takeOrder(Map<Item, Integer> order) {
 		orderQueue.add(order);
+		
+		done = false;
 	}
 	
 	/*

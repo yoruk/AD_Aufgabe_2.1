@@ -13,13 +13,13 @@ public class Simulation {
 	public static boolean TEST = false;
 	
 	public static void main(String[] args) throws Exception {
-        for (int k = 0; k < 1;k++) { 
-	        System.out.println("Durchlauf:"+k);
+        for (int k=0; k<1; k++) { 
+	        System.out.println("Durchlauf: " + k);
 	       
 	        List<Item> item = Item.factory();
 	        Warehouse wh = new WarehouseImpl(item);
         
-	        for(int i = 0;i < 300;i++) {
+	        for(int i=0; i<300; i++) {
 	        	wh.takeOrder(Order.factory(item));
 	        }
         
@@ -42,7 +42,7 @@ public class Simulation {
        System.out.print(wh.toString());
        
        int i=0;
-       while (!wh.done() && i < 3000000) {
+       while (!wh.done() && i < 30000) {
     	   wh.action();
 //           	 System.out.println(i);
     	   System.out.print(wh.toString());

@@ -130,22 +130,29 @@ public class RobotImpl implements Robot {
 
     /**
      * Sucht das sich das erste item aus der Order und gibt davon die position
-     * zurueck
+     * zurueck, oder gibt ggf. die startkoordinaten zurueck
      * 
      * @return das naechste Ziel
      */
     public int[] destination() {
         Set<Item> test = order.keySet();
+        
         int[] i = { startPosY, startPosX };
+        
+        // solange noch items zu holen sind
         if (!test.isEmpty()) {
             for (Item elem : test) {
-                i[0] = elem.productPosY();
+                // nimm koordinaten aus dem item das zu holen ist.
+            	i[0] = elem.productPosY();
                 i[1] = elem.productPosX();
+                
                 System.out.println("Robot [" + df.format(this.id()) + "]: " + "Hole Item bei Y: " + df.format(i[0]) + " X: " + df.format(i[1]));
+                
                 return i;
-
             }
         }
+        
+        // ansonsten fahre zu startposition zurueck
         return i;
     }
 
@@ -169,6 +176,7 @@ public class RobotImpl implements Robot {
     			return true;
     		}
         }
+    	
     	evade(y, x);
     	return false;
 	}
@@ -180,12 +188,15 @@ public class RobotImpl implements Robot {
      */
     public boolean remove() {
         Set<Item> test = order.keySet();
+        
         if (!test.isEmpty()) {
             for (Item ele : test) {
                 order.remove(ele);
+                
                 return true;
             }
         }
+        
         return false;
     }
 
@@ -193,8 +204,7 @@ public class RobotImpl implements Robot {
      * macht eine Roboter action
      */
     public void action() {
-        // System.out.println("Robot Action");
-
+      
         if (order != null && !order.isEmpty()) {
             busy = true;
 
