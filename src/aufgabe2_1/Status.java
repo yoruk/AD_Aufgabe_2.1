@@ -18,10 +18,10 @@ package aufgabe2_1;
  */
 public enum Status {
 
-	IDLE,
-	BUSY,
-	BOXING,
-	MOVING,
-	LOADING
-	
+    IDLE,
+    BUSY,
+    BOXING,
+    MOVING,
+    LOADING
+
 }

@@ -1,7 +1,0 @@
-
-public interface StorageArea implements BoxingPlant {
-  //BoxingPlant  SETUP 
-	 DECLADE Item item();
-
-  
-END CLASS

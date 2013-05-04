@@ -1,57 +1,58 @@
 package aufgabe2_1;
 
 public class StorageAreaImpl implements StorageArea {
-	private int amountOfRobots;
-	private int coordinateX;
-	private int coordinateY;
-	private Item item;
-	private int robotId;
+    private int amountOfRobots;
+    private int coordinateX;
+    private int coordinateY;
+    private Item item;
+    private int robotId;
 
-	public StorageAreaImpl(Item item) {
-		amountOfRobots = 0;
-		
-		coordinateX = item.productPosX();
-		coordinateY = item.productPosY();
-		
-		this.item = item;
-	}
-	
-	public int hasRobots() {
-		return amountOfRobots;
-	}
-	
-	public int coordinateX() {
-		return coordinateX;
-	}
-	
-	public int coordinateY() {
-		return coordinateY;
-	}
+    public StorageAreaImpl(Item item) {
+        amountOfRobots = 0;
 
-	public boolean isBoxingPlant() {
-		return false;
-	}
-	
-	public Item item() {
-		return item;
-	}
+        coordinateX = item.productPosX();
+        coordinateY = item.productPosY();
 
-	@Override
-	public String toString() {
-		return "SorageAreaImpl: x/y: " + coordinateX + "/" + coordinateY + " Item:" + item;
-	}
+        this.item = item;
+    }
 
-	public void reg(Robot bot) {
-		 amountOfRobots++;
-		 this.robotId = bot.id();
-	}
+    public int hasRobots() {
+        return amountOfRobots;
+    }
 
-	public void unReg() {
-		amountOfRobots--;
-       this.robotId = 0;
-	}
+    public int coordinateX() {
+        return coordinateX;
+    }
 
-	public int robotID() {
-		return robotId;
-	}
+    public int coordinateY() {
+        return coordinateY;
+    }
+
+    public boolean isBoxingPlant() {
+        return false;
+    }
+
+    public Item item() {
+        return item;
+    }
+
+    @Override
+    public String toString() {
+        return "StorageAreaImpl: XY-Koordinaten: " + coordinateX + "/" + coordinateY + " Item ID: " + item;
+    }
+
+    public void reg(Robot bot) {
+        amountOfRobots++;
+        this.robotId = bot.id();
+    }
+
+    public void unReg() {
+        amountOfRobots--;
+        this.robotId = 0;
+    }
+
+    public int robotID() {
+        return robotId;
+    }
+
 }

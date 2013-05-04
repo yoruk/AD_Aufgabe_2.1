@@ -4,21 +4,22 @@ import java.util.*;
 import java.util.Map.Entry;
 
 public class Order {
-	private Map<Item, Integer> order;
+
+    private Map<Item, Integer> order;
 
     // Public Konstruktor zum Anlegen von Testfaellen
     public Order() {
-        order = new HashMap<Item, Integer>();;
+        order = new TreeMap<Item, Integer>();
     }
-    
-    // zum testen
+
+    // Zum Testen
     public void addItem(Item item, int amount) {
-    	order.put(item, amount);
+        order.put(item, amount);
     }
-    
-    // zum testen
-    public Map<Item, Integer> list() {
-    	return order;
+
+    // Zum Testen
+    public Map<Item, Integer> getMap() {
+        return order;
     }
 
     /*
@@ -33,21 +34,20 @@ public class Order {
      *           ansonsten wird es der Map hinzugefuegt und die Anzahl des Items
      *           auf 1 gesetzt. Falls ein Item doppelt gezogen wird,
      *           wird die Anzahl in der Map erhoeht.
-     *           
      */
     public static Map<Item, Integer> factory(List<Item> items) {
-    	int temp_ORDERMAXSIZE = (Simulation.TEST) ? JUnitTestframe.ORDERMAXSIZE : Simulation.ORDERMAXSIZE;
-    	
-    	Map<Item, Integer> orderMap = new HashMap<Item, Integer>();
-    	boolean orderComplete = false;
+        int temp_ORDERMAXSIZE = (Simulation.TEST) ? JUnitTestframe.ORDERMAXSIZE : Simulation.ORDERMAXSIZE;
+
+        Map<Item, Integer> orderMap = new TreeMap<Item, Integer>();
+        boolean orderComplete = false;
         int randomItem;
         int currentOrderSize = temp_ORDERMAXSIZE;
         Item tempItem = null;
         Integer tempQuantity = 0;
 
         while (!orderComplete) {
-        	
-        	// Zufaelliges Item aus uebergebener List<Item> suchen
+
+            // Zufaelliges Item aus uebergebener List<Item> suchen
             randomItem = (int) (Math.random() * items.size() + 1);
 
             for (Item element : items) {
@@ -81,12 +81,14 @@ public class Order {
 
     @Override
     public String toString() {
-    	StringBuilder output = new StringBuilder();
+        StringBuilder output = new StringBuilder();
 
         for (Entry<Item, Integer> element : order.entrySet()) {
-            output.append(element.getKey() + " = " + element.getValue());
+            output.append("Item ID: " + element.getKey());
+            output.append(" Menge: " + element.getValue());
         }
 
         return output.toString();
     }
+
 }
